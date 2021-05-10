@@ -1,4 +1,6 @@
 /.idea
+/data/
+/.env
 /vendor
 .php_cs.cache
 .phpunit.result.cache
