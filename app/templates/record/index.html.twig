@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Records list
+   Q&A
 {% endblock %}
 
 {% block body %}
-    <h1>Records list</h1>
+    <h1>Q&A</h1>
     {% if data is defined and data|length %}
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Tags</th>
+                <th>{{ 'label_id'|trans }}</th>
+                <th>{{ 'label_question'|trans }}</th>
+                <th>{{ 'label_tags'|trans }}</th>
                 <th scope="col">
-                    Actions
+                    {{ 'label_actions'|trans }}
                 </th>
             </tr>
             </thead>
@@ -22,9 +22,13 @@
             {% for item in data %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.title }}</td>
+                    <td>{{ item.question }}</td>
                     <td>{{ item.tags|join(', ') }}</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <a href="{{ url('record_show', {id: item.id}) }}" title="view" id="view_button">
+                            {{ 'label_view'|trans }}
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

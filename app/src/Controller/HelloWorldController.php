@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class HelloWorldController.
+ *
+ * @Route("/hello-world")
  */
 class HelloWorldController extends AbstractController
 {
@@ -23,7 +25,6 @@ class HelloWorldController extends AbstractController
      *
      * @Route(
      *     "/{name}",
-     *     methods={"GET"},
      *     name="hello-world_index",
      *     defaults={"name":"World"},
      *     requirements={"name": "[a-zA-Z]+"},

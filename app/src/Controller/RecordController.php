@@ -37,11 +37,28 @@ class RecordController extends AbstractController
             ['data' => $repository->findAll()]
         );
     }
-    public function show(RecordRepository $repository, int $id): Response
-    {
-        return $this->render(
-            'record/show.html.twig',
-            ['item' => $repository->findById($id)]
+     /**
+         * Show action.
+         *
+         * @param \App\Repository\RecordRepository $repository Record repository
+         * @param int                              $id         Record id
+         *
+         * @Route(
+         *     "/{id}",
+         *     methods={"GET"},
+         *     name="record_show",
+         *     requirements={"id": "[1-9]\d*"},
+         * )
+         *
+         * @return \Symfony\Component\HttpFoundation\Response HTTP response
+         */
+
+   public function show(RecordRepository $repository, int $id): Response
+       {
+           return $this->render(
+               'record/show.html.twig',
+               ['item' => $repository->findById($id)]
+
         );
     }
 }

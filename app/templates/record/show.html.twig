@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    View record
+{% endblock %}
+
+{% block body %}
+    <h1>View record</h1>
+    {% if item is defined and item|length %}
+        <dl>
+            <dt>{{ 'label_question'|trans }}</dt>
+            <dd>{{ item.question }}</dd>
+            <dt>{{ 'label_answer'|trans }}</dt>
+            <dd>{{ item.answer }}</dd>
+            <dt>{{ 'label_tags'|trans }}</dt>
+            <dd>{{ item.tags|join(', ') }}</dd>
+        </dl>
+    {% else %}
+        <p>
+            Record not found.
+        </p>
+    {% endif %}
+    <p>
+        <a href="{{url('record_index')}}" title="back to the list" id="back_button">
+            {{ 'label_back_to_the_list'|trans }}
+        </a>
+    </p>
+{% endblock %}

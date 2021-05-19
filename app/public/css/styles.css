@@ -1,0 +1,27 @@
+#back_button{
+    background-color: #6EB5DC;
+    border-radius: 5px;
+    color: white;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+
+}
+#back_button:hover{
+    background-color: #268ADA;
+    color: black;
+}
+#view_button{
+    background-color: #6EB5DC;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+#view_button:hover{
+    background-color: #268ADA;
+    color: black;
+}
