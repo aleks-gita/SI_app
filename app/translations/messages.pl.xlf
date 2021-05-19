@@ -2,7 +2,11 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
-            <trans-unit id="label_actions">
+            <trans-unit id="title_question_list">
+                <source>title_question_list</source>
+                <target>Q and A</target>
+           </trans-unit>
+           <trans-unit id="label_actions">
                 <source>label_actions</source>
                 <target>Operacje</target>
             </trans-unit>
@@ -22,9 +26,29 @@
                 <source>label_tags</source>
                 <target>Tagi</target>
             </trans-unit>
-           <trans-unit id="label_back_to_the_list">
-                <source>label_back_to_the_list</source>
+            <trans-unit id="label_title">
+                <source>label_title</source>
+                <target>Tytuł</target>
+            </trans-unit>
+            <trans-unit id="label_date">
+                <source>label_date</source>
+                <target>Data</target>
+            </trans-unit>
+            <trans-unit id="label_content">
+                <source>label_content</source>
+                <target>Treść</target>
+            </trans-unit>
+            <trans-unit id="action_view">
+                <source>action_view</source>
+                <target>Zobacz</target>
+           </trans-unit>
+           <trans-unit id="action_back_to_list">
+                <source>action_back_to_list</source>
                 <target>Wróć do listy pytań</target>
+           </trans-unit>
+           <trans-unit id="title_question_details">
+                <source>title_question_details</source>
+                <target>Szczegóły pytania #%id%</target>
            </trans-unit>
         </body>
     </file>
