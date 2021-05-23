@@ -1,31 +1,47 @@
 <?php
+/**
+ * Task fixtures.
+ */
 
 namespace App\DataFixtures;
 
-
 use App\Entity\Question;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 
-class QuestionFixture extends Fixture
+/**
+ * Class TaskFixtures.
+ */
+class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureInterface
 {
-    protected  \Faker\Generator $faker;
-
-    protected ObjectManager $manager;
-
-    public function load(ObjectManager $manager)
+    /**
+     * Load data.
+     *
+     * @param \Doctrine\Persistence\ObjectManager $manager Persistence object manager
+     */
+    public function loadData(ObjectManager $manager): void
     {
-        $this->faker = Factory::create();
-        $this->manager =$manager;
-
-        for($i=0; $i<10; ++$i){
+        $this->createMany(50, 'questions', function ($i) {
             $question = new Question();
             $question->setContent($this->faker->sentence);
             $question->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $this->manager->persist($question);
-        }
+            $question->setCategory($this->getRandomReference('categories'));
 
-       $this->manager->flush();
+            return $question;
+        });
+
+        $manager->flush();
+    }
+
+    /**
+     * This method must return an array of fixtures classes
+     * on which the implementing class depends on.
+     *
+     * @return array Array of dependencies
+     */
+    public function getDependencies(): array
+    {
+        return [CategoryFixture::class];
     }
 }

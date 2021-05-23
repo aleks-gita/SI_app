@@ -1,26 +1,25 @@
 <?php
-/**
- * Answer fixtures.
- */
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
-use Doctrine\Persistence\ObjectManager;
 
-/**
- * Class AnswerFixtures.
- */
-class AnswerFixture extends AbstractBaseFixtures
+use App\Entity\Answer;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
+
+class AnswerFixture_2 extends Fixture
 {
-    /**
-     * Load data.
-     *
-     * @param \Doctrine\Persistence\ObjectManager $manager Persistence object manager
-     */
-    public function loadData(ObjectManager $manager): void
+    protected  \Faker\Generator $faker;
+
+    protected ObjectManager $manager;
+
+    public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 10; ++$i) {
+        $this->faker = Factory::create();
+        $this->manager =$manager;
+
+        for($i=0; $i<10; ++$i){
             $answer = new Answer();
             $answer->setContent($this->faker->sentence);
             $answer->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
@@ -28,6 +27,6 @@ class AnswerFixture extends AbstractBaseFixtures
             $this->manager->persist($answer);
         }
 
-        $manager->flush();
+        $this->manager->flush();
     }
 }

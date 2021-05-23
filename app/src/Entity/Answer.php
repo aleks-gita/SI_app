@@ -65,9 +65,9 @@ class Answer
         return $this->indication;
     }
 
-    public function setIndication(bool $undication): void
+    public function setIndication(bool $indication): void
     {
-        $this->indication = $undication;
+        $this->indication = $indication;
 
     }
 }
