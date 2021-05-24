@@ -1,6 +1,6 @@
 <?php
 /**
- * Task fixtures.
+ * Question fixtures.
  */
 
 namespace App\DataFixtures;
@@ -10,7 +10,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
- * Class TaskFixtures.
+ * Class Question Fixtures.
  */
 class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureInterface
 {
@@ -25,12 +25,11 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
             $question = new Question();
             $question->setContent($this->faker->sentence);
             $question->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
-            $this->manager->persist($question);
             $question->setCategory($this->getRandomReference('categories'));
+            $question->setAnswer($this->getRandomReference('answers'));
 
             return $question;
         });
-
         $manager->flush();
     }
 
@@ -43,5 +42,8 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
     public function getDependencies(): array
     {
         return [CategoryFixture::class];
+
+        return [AnswerFixture::class];
     }
+
 }

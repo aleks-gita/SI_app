@@ -20,13 +20,14 @@ class AnswerFixture extends AbstractBaseFixtures
      */
     public function loadData(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 10; ++$i) {
+        $this->createMany(50, 'answers', function ($i) {
             $answer = new Answer();
             $answer->setContent($this->faker->sentence);
             $answer->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $answer->setIndication($this->faker->boolean());
-            $this->manager->persist($answer);
-        }
+
+            return $answer;
+        });
 
         $manager->flush();
     }

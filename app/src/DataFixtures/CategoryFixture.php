@@ -20,11 +20,13 @@ class CategoryFixture extends AbstractBaseFixtures
      */
     public function loadData(ObjectManager $manager): void
     {
-        for ($i = 0; $i <10; ++$i) {
+        $this->createMany(10, 'categories', function ($i) {
             $category = new Category();
-            $category->setname($this->faker->word);
+            $category->setName($this->faker->word);
 
-        }
+            return $category;
+        });
+
 
         $manager->flush();
     }

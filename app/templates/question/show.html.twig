@@ -11,9 +11,11 @@
             <dt>{{ 'label_id'|trans }}</dt>
             <dd>{{ question.id }}</dd>
             <dt>{{ 'label_date'|trans }}</dt>
-            <dd>{{ question.date|date('Y/m/d') }}</dd>
+            <dd>{{ question.date|format_date('long') }}</dd>
             <dt>{{ 'label_content'|trans }}</dt>
             <dd>{{ question.content }}</dd>
+            <dt>{{ 'label_category'|trans }}</dt>
+            <dd>{{  question.category.name }}</dd>
         </dl>
         <p>
             <a href="{{ url('question_index') }}" title="{{ 'action_back_to_list'|trans }}" id="view_button">

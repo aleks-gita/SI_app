@@ -12,7 +12,8 @@
             <tr>
                 <th>{{ 'label_id'|trans }}</th>
                 <th>{{ 'label_question'|trans }}</th>
-                <th>{{ 'label_title'|trans }}</th>
+                <th>{{ 'label_date'|trans }}</th>
+                <th>{{ 'label_category'|trans }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
             </tr>
             </thead>
@@ -21,7 +22,8 @@
             <tr>
                 <td>{{ question.id }}</td>
                 <td>{{ question.content }}</td>
-                <td>{{ question.date|date ('Y/m/d')}}</td>
+                <td>{{ question.date|format_date('long')}}</td>
+                <td>{{ question.category.name }}</td>
                 <td>
                     <a href="{{ url('question_show', {id: question.id}) }}" title="view" id="view_button">
                         {{ 'action_view'|trans }}
