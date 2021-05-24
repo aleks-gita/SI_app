@@ -17,14 +17,27 @@
             <dt>{{ 'label_category'|trans }}</dt>
             <dd>{{  question.category.name }}</dd>
         </dl>
-        <p>
-            <a href="{{ url('question_index') }}" title="{{ 'action_back_to_list'|trans }}" id="view_button">
-                {{ 'action_back_to_list'|trans }}
-            </a>
-        </p>
+
+    {% elseif answer is defined and answer|length %}
+    <dl class="dl-horizontal">
+        <dt>{{ 'label_answer'|trans }}</dt>
+        <dd>{{  answer.content }}</dd>
+    </dl>
     {% else %}
         <p>
             {{ 'message_item_not_found'|trans }}
         </p>
     {% endif %}
+    {% if answer is defined and answer|length %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label_answer'|trans }}</dt>
+            <dd>{{  answer.content }}</dd>
+        </dl>
+    {% endif %}
+    <p>
+        <a href="{{ url('question_index') }}" title="{{ 'action_back_to_list'|trans }}" id="view_button">
+            {{ 'action_back_to_list'|trans }}
+        </a>
+    </p>
+
 {% endblock %}

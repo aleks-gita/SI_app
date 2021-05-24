@@ -34,8 +34,7 @@ class Answer
     private $indication;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="answer")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="answers")
      */
     private $question;
 
@@ -88,4 +87,5 @@ class Answer
 
         return $this;
     }
+
 }

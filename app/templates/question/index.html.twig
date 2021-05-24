@@ -15,6 +15,7 @@
                 <th>{{ 'label_date'|trans }}</th>
                 <th>{{ 'label_category'|trans }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
+                <th>{{ 'label_actions2'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -26,6 +27,11 @@
                 <td>{{ question.category.name }}</td>
                 <td>
                     <a href="{{ url('question_show', {id: question.id}) }}" title="view" id="view_button">
+                        {{ 'action_view'|trans }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ url('answer_show', {id: question.id}) }}" title="view" id="view_button">
                         {{ 'action_view'|trans }}
                     </a>
                 </td>

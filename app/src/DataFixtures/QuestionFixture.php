@@ -26,7 +26,6 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
             $question->setContent($this->faker->sentence);
             $question->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $question->setCategory($this->getRandomReference('categories'));
-            $question->setAnswer($this->getRandomReference('answers'));
 
             return $question;
         });
@@ -43,7 +42,6 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
     {
         return [CategoryFixture::class];
 
-        return [AnswerFixture::class];
     }
 
 }

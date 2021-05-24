@@ -6,12 +6,14 @@
 namespace App\DataFixtures;
 
 use App\Entity\Answer;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Class AnswerFixtures.
  */
-class AnswerFixture extends AbstractBaseFixtures
+class AnswerFixture extends AbstractBaseFixtures implements DependentFixtureInterface
+
 {
     /**
      * Load data.
@@ -25,10 +27,22 @@ class AnswerFixture extends AbstractBaseFixtures
             $answer->setContent($this->faker->sentence);
             $answer->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $answer->setIndication($this->faker->boolean());
+            $answer->setQuestion($this->getRandomReference('questions'));
+
 
             return $answer;
         });
 
         $manager->flush();
+    }
+    /**
+     * This method must return an array of fixtures classes
+     * on which the implementing class depends on.
+     *
+     * @return array Array of dependencies
+     */
+    public function getDependencies(): array
+    {
+        return [QuestionFixture::class];
     }
 }
