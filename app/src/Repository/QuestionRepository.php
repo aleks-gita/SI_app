@@ -15,7 +15,16 @@ use Doctrine\ORM\QueryBuilder;
  */
 class QuestionRepository extends ServiceEntityRepository
 {
-
+    /**
+     * Items per page.
+     *
+     * Use constants to define configuration options that rarely change instead
+     * of specifying them in app/config/config.yml.
+     * See https://symfony.com/doc/current/best_practices.html#configuration
+     *
+     * @constant int
+     */
+    const PAGINATOR_ITEMS_PER_PAGE = 10;
 
 
     public function __construct(ManagerRegistry $registry)
@@ -23,6 +32,15 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
+    public function queryAll(): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder()
+                -> orderBy('question.date', 'DESC');
+    }
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null ): QueryBuilder
+    {
+        return $queryBuilder ?? $this->createQueryBuilder('question');
+    }
 
 
 

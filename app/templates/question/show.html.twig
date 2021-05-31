@@ -16,6 +16,7 @@
             <dd>{{ question.content }}</dd>
             <dt>{{ 'label_category'|trans }}</dt>
             <dd>{{  question.category.name }}</dd>
+
         </dl>
 
     {% elseif answer is defined and answer|length %}

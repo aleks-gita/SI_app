@@ -5,33 +5,38 @@ namespace App\Controller;
 
 
 
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
-use Knp\Component\Pager\Pagination\PaginationInterface;
+
 
 
 /**
  *Class QuestionController
  *
-* @Route("/question")
-*/
+ * @Route("/question")
+ */
 class QuestionController extends AbstractController
 {
     private QuestionRepository $questionRepository;
 
+    private PaginatorInterface $paginator;
 
-    public function __construct(QuestionRepository $questionRepository)
+    public function __construct(QuestionRepository $questionRepository, PaginatorInterface $paginator)
     {
-        $this->questionRepository = $questionRepository;
+        $this-> questionRepository = $questionRepository;
+        $this-> paginator = $paginator;
     }
 
     /**
      * Index action.
-
+     *
+     *
+     * @param Request $request
      * @return Response HTTP response
      *
      * @Route(
@@ -41,15 +46,21 @@ class QuestionController extends AbstractController
      * )
      */
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $questions = $this->questionRepository->findAll();
+        $pagination = $this->paginator->paginate(
+          $this->questionRepository->queryAll(),
+          $request->query->getInt('page', 1),
+            QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
+        );
 
         return $this->render(
             'question/index.html.twig',
-            ['question'=>$questions]
+            ['pagination'=>$pagination]
         );
     }
+
+
 
     /**
      * Show action.
