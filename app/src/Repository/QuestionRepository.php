@@ -32,10 +32,45 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
+    /**
+     * Save record.
+     *
+     * @param \App\Entity\Question $question Question entity
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(Question $question): void
+    {
+        $this->_em->persist($question);
+        $this->_em->flush();
+    }
+
+    /**
+     * Delete record.
+     *
+     * @param \App\Entity\Question $question Question entity
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(Question $question): void
+    {
+        $this->_em->remove($question);
+        $this->_em->flush();
+    }
+
     public function queryAll(): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder()
-                -> orderBy('question.date', 'DESC');
+            ->select(
+                'partial question.{id, date, title, content}',
+                'partial category.{id, name}',
+                'partial tags.{id,title}'
+            )
+            ->join('question.category', 'category')
+            ->leftJoin('question.tags', 'tags')
+            -> orderBy('question.date', 'DESC');
     }
     private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null ): QueryBuilder
     {

@@ -19,8 +19,9 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label_question'|trans, 'question.content' ) }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_date'|trans, 'question.date') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_category'|trans, 'question.category.name') }}</th>
+                <th>{{ 'label_tags'|trans }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
-                <th>{{  'label_actions2'|trans }}</th>
+
             </tr>
             </thead>
             <tbody>
@@ -31,16 +32,34 @@
                 <td>{{ question.date|format_date('long')}}</td>
                 <td>{{ question.category.name }}</td>
                 <td>
+                    {% if question.tags is defined and question.tags|length %}
+                        {% for tag in question.tags %}
+                            {{ tag.title }}
+                        {% endfor %}
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                </td>
+                <td>
                     <a href="{{ url('question_show', {id: question.id}) }}" title="view" id="view_button">
                         {{ 'action_view'|trans }}
                     </a>
-                </td>
-                <td>
+
                     <a href="{{ url('answer_show', {id: question.id}) }}" title="view" id="view_button">
-                        {{ 'action_view'|trans }}
+                        {{ 'action_view2'|trans }}
                     </a>
+
+                    <a href="{{ url('question_edit', {id: question.id}) }}" title="view" id="view_button">
+                        {{ 'action_edit'|trans }}
+                    </a>
+
+
+                        <a href="{{ url('question_delete', {id: question.id}) }}" title="view" id="view_button">
+                            {{ 'action_delete'|trans }}
+                        </a>
+
                 </td>
-                </td>
+
             </tr>
               {% endfor %}
             </tbody>
@@ -51,8 +70,9 @@
 
 
     {% else %}
-        <p>
-            {{ 'massage_empty_list'|trans }}
-        </p>
+        {% include 'default/_single_flash_message.html.twig' with {
+            type: 'warning',
+            message: 'message.empty_list'|trans
+        } %}
     {% endif %}
 {% endblock %}

@@ -9,12 +9,27 @@
     {% endblock %}
 </head>
 <body>
+    <div id="menu">
+        <ul>
+            <li><a href="{{ url('answer_index')}}" title="view">
+                    {{ 'menu_answer'|trans }}
+                </a></li>
+            <li><a href="{{ url('question_index') }}" title="view">
+                    {{ 'menu_question'|trans }}
+                </a></li>
+            <li><a href="{{ url('category_index') }}" title="view">
+                    {{ 'menu_category'|trans }}
+                </a></li>
+        </ul>
+    </div>
+
 <div class="container-fluid">
     {% for type, messages in app.session.flashBag.all %}
         {% for message in messages %}
-            <div class="alert alert-{{ type }}" role="alert">
-                {{ message|trans }}
-            </div>
+            {% include 'default/_single_flash_message.html.twig' with {
+                type: type,
+                message: message|trans
+            } %}
         {% endfor %}
     {% endfor %}
     {% block body %}{% endblock %}

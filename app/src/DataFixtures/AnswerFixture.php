@@ -24,6 +24,7 @@ class AnswerFixture extends AbstractBaseFixtures implements DependentFixtureInte
     {
         $this->createMany(50, 'answers', function ($i) {
             $answer = new Answer();
+            $answer->setTitle($this->faker->sentence);
             $answer->setContent($this->faker->sentence);
             $answer->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $answer->setIndication($this->faker->boolean());

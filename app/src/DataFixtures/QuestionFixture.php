@@ -23,9 +23,12 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
     {
         $this->createMany(50, 'questions', function ($i) {
             $question = new Question();
-            $question->setContent($this->faker->sentence('?'));
+            $question->setTitle($this->faker->sentence);
+            $question->setContent($this->faker->sentence);
             $question->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $question->setCategory($this->getRandomReference('categories'));
+            $question->addTag($this->getRandomReference('tags'));
+
 
             return $question;
         });
@@ -40,7 +43,7 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
      */
     public function getDependencies(): array
     {
-        return [CategoryFixture::class];
+        return [CategoryFixture::class, TagFixture::class];
 
     }
 
