@@ -1,7 +1,33 @@
+#menu ul{
+    list-style-type: none;
 
 
+}
+#menu li{
+    display: inline;
+    font-size:20px;
+    padding: 5px;
+    margin-top:0px
+}
+nav a{
+    background-color:#6EB5DC;
+    border-radius: 5px;
+    margin-top:0px;
+    padding:5px 10px;
+    text-decoration:none;
+    color: white;
+}
+a:hover{
+    color: #F2CEF2;
+    border-radius: 3px;
+}
 
-
+.login{
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 18px;
+}
 #back_button{
     background-color: #6EB5DC;
     border-radius: 5px;

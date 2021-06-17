@@ -34,6 +34,13 @@
                         <a href="{{ url('answer_show', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_view'|trans }}
                         </a>
+                        <a href="{{ url('answer_edit', {id: answer.id}) }}" title="view" id="view_button">
+                            {{ 'action_edit'|trans }}
+                        </a>
+                        <a href="{{ url('answer_delete', {id: answer.id}) }}" title="view" id="view_button">
+                            {{ 'action_delete'|trans }}
+                        </a>
+
                     </td>
 
                 </tr>

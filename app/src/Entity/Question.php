@@ -65,6 +65,7 @@ class Question
 
     /**
      * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question")
+     *
      */
     private $answers;
 
@@ -89,6 +90,7 @@ class Question
      *     inversedBy="questions",
      * )
      * @ORM\JoinTable(name="questions_tags")
+     * @ORM\JoinTable(name="questions_answers")
      */
     private $tags;
 

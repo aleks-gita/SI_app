@@ -35,8 +35,10 @@ class Answer
 
     /**
      * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="answers")
+     * @ORM\JoinTable(name="answers_questions")
+     *
      */
-    private $question;
+    private $questions;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -83,12 +85,12 @@ class Answer
 
     public function getQuestion(): ?Question
     {
-        return $this->question;
+        return $this->questions;
     }
 
     public function setQuestion(?Question $question): self
     {
-        $this->question = $question;
+        $this->questions = $question;
 
         return $this;
     }

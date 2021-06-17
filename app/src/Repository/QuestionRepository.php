@@ -67,8 +67,10 @@ class QuestionRepository extends ServiceEntityRepository
                 'partial question.{id, date, title, content}',
                 'partial category.{id, name}',
                 'partial tags.{id,title}'
+
             )
             ->join('question.category', 'category')
+
             ->leftJoin('question.tags', 'tags')
             -> orderBy('question.date', 'DESC');
     }

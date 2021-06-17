@@ -26,6 +26,10 @@
                     <td>{{ category.id }}</td>
                     <td>{{ category.name }}</td>
                     <td>
+
+                        <a href="{{ url('category_show', {id: category.id}) }}" title="view" id="view_button">
+                            {{ 'category_view'|trans }}
+                        </a>
                         <a href="{{ url('category_edit', {id: category.id}) }}" title="view" id="view_button">
                             {{ 'action_edit'|trans }}
                         </a>

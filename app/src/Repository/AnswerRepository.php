@@ -44,6 +44,7 @@ class AnswerRepository extends ServiceEntityRepository
     public function queryAll(): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder()
+
             -> orderBy('answer.date', 'DESC');
     }
 
@@ -73,6 +74,11 @@ class AnswerRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    public function delete(Answer $answer): void
+    {
+        $this->_em->remove($answer);
+        $this->_em->flush();
+    }
     // /**
     //  * @return Answer[] Returns an array of Answer objects
     //  */
