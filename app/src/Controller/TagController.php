@@ -1,13 +1,13 @@
 <?php
 /**
- * Category controller.
+ * Tag controller.
  */
 
 namespace App\Controller;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
-use App\Form\CategoryType;
+use App\Entity\Tag;
+use App\Repository\TagRepository;
+use App\Form\TagType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -19,17 +19,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 /**
- * Class CategoryController.
+ * Class TagController.
  *
- * @Route("/category")
+ * @Route("/tag")
  */
-class CategoryController extends AbstractController
+class TagController extends AbstractController
 {
     /**
      * Index action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param \App\Repository\TagRepository        $tagRepository Tag repository
      * @param \Knp\Component\Pager\PaginatorInterface   $paginator          Paginator
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
@@ -37,20 +37,21 @@ class CategoryController extends AbstractController
      * @Route(
      *     "/",
      *     methods={"GET"},
-     *     name="category_index",
+     *     name="tag_index",
      * )
      *
+     *
      */
-    public function index(Request $request, CategoryRepository $categoryRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, TagRepository $tagRepository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $categoryRepository->queryAll(),
+            $tagRepository->queryAll(),
             $request->query->getInt('page', 1),
-            CategoryRepository::PAGINATOR_ITEMS_PER_PAGE
+            TagRepository::PAGINATOR_ITEMS_PER_PAGE
         );
 
         return $this->render(
-            'category/index.html.twig',
+            'tag/index.html.twig',
             ['pagination' => $pagination]
         );
     }
@@ -58,31 +59,31 @@ class CategoryController extends AbstractController
     /**
      * Show action.
      *
-     * @param \App\Entity\Category $category Category entity
+     * @param \App\Entity\Tag $tag Category entity
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
      * @Route(
      *     "/{id}",
      *     methods={"GET"},
-     *     name="category_show",
+     *     name="tag_show",
      *     requirements={"id": "[1-9]\d*"},
      * )
      *
      *
      */
-    public function show(Category $category): Response
+    public function show(Tag $tag): Response
     {
         return $this->render(
-            'category/show.html.twig',
-            ['category' => $category]
+            'tag/show.html.twig',
+            ['tag' => $tag]
         );
     }
-     /**
+    /**
      * Create action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param \App\Repository\CategoryRepository        $tagRepository Tag repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -92,27 +93,27 @@ class CategoryController extends AbstractController
      * @Route(
      *     "/create",
      *     methods={"GET", "POST"},
-     *     name="category_create",
+     *     name="tag_create",
      * )
      *
-      */
-    public function create(Request $request, CategoryRepository $categoryRepository): Response
+     */
+    public function create(Request $request, TagRepository $tagRepository): Response
     {
-        $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
+        $tag = new Tag();
+        $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category->setAuthor($this->getUser());
-            $categoryRepository->save($category);
+            //$tag->setAuthor($this->getUser());
+            $tagRepository->save($tag);
 
             $this->addFlash('success', 'message_created_successfully');
 
-            return $this->redirectToRoute('category_index');
+            return $this->redirectToRoute('tag_index');
         }
 
         return $this->render(
-            'category/create.html.twig',
+            'tag/create.html.twig',
             ['form' => $form->createView()]
         );
     }
@@ -120,8 +121,8 @@ class CategoryController extends AbstractController
      * Edit action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Category                      $category           Category entity
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param \App\Entity\Tag                     $tag           Tag entity
+     * @param \App\Repository\TagRepository        $tagRepository Tag repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -132,33 +133,34 @@ class CategoryController extends AbstractController
      *     "/{id}/edit",
      *     methods={"GET", "PUT"},
      *     requirements={"id": "[1-9]\d*"},
-     *     name="category_edit",
+     *     name="tag_edit",
      *
      * )
      * @IsGranted("ROLE_ADMIN",
      *     "EDIT",
-     *     subject="category",
+     *     subject="tag",
      * )
+     *
      */
 
-    public function edit(Request $request, Category $category, CategoryRepository $categoryRepository): Response
+    public function edit(Request $request, Tag $tag, TagRepository $tagRepository): Response
     {
-        $form = $this->createForm(CategoryType::class, $category, ['method' => 'PUT']);
+        $form = $this->createForm(TagType::class, $tag, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $categoryRepository->save($category);
+            $tagRepository->save($tag);
 
             $this->addFlash('success', 'message_updated_successfully');
 
-            return $this->redirectToRoute('category_index');
+            return $this->redirectToRoute('tag_index');
         }
 
         return $this->render(
-            'category/edit.html.twig',
+            'tag/edit.html.twig',
             [
                 'form' => $form->createView(),
-                'category' => $category,
+                'tag' => $tag,
             ]
         );
     }
@@ -166,8 +168,8 @@ class CategoryController extends AbstractController
      * Delete action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Category                      $category           Category entity
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param \App\Entity\Tag                     $tag           tag entity
+     * @param \App\Repository\TagRepository        $tagRepository tag repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -178,19 +180,16 @@ class CategoryController extends AbstractController
      *     "/{id}/delete",
      *     methods={"GET", "DELETE"},
      *     requirements={"id": "[1-9]\d*"},
-     *     name="category_delete",
+     *     name="tag_delete",
      * )
-     *
-     * @IsGranted(
-     *     "ROLE_ADMIN",
-     *    "DELETE",
-     *     subject="category",
+     *@IsGranted("ROLE_ADMIN",
+     *     "DELETE",
+     *     subject="tag",
      * )
-     *
      *
      */
 
-    public function delete(Request $request, Category $category, CategoryRepository $categoryRepository): Response
+    public function delete(Request $request, Tag $tag, TagRepository $tagRepository): Response
     {
         /*if($category->getCategory()->count()){
             $this->addFlash('warning', 'message_category_contains_questions');
@@ -198,7 +197,7 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('category_index');
         }*/
 
-        $form = $this->createForm(FormType::class, $category, ['method' => 'DELETE']);
+        $form = $this->createForm(FormType::class, $tag, ['method' => 'DELETE']);
         $form->handleRequest($request);
 
         if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
@@ -206,17 +205,17 @@ class CategoryController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $categoryRepository->delete($category);
+            $tagRepository->delete($tag);
             $this->addFlash('success', 'message_deleted_successfully');
 
-            return $this->redirectToRoute('category_index');
+            return $this->redirectToRoute('tag_index');
         }
 
         return $this->render(
-            'category/delete.html.twig',
+            'tag/delete.html.twig',
             [
                 'form' => $form->createView(),
-                'category' => $category,
+                'tag' => $tag,
             ]
         );
     }

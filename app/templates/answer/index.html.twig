@@ -18,29 +18,43 @@
             <tr>
                 <th>{{ knp_pagination_sortable(pagination, 'label_id'|trans, 'answer.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_date'|trans, 'answer.date') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label_title'|trans, 'answer.title') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_content'|trans, 'answer.content') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_indication'|trans, 'answer.indication') }}</th>
+                <th>{{ 'label_author'|trans }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
+
+            <a href="{{ url('answer_create') }}" title="view" id="view_button">
+                {{ 'answer_create'|trans }}
+            </a>
+
             {% for answer in pagination.items %}
                 <tr>
                     <td>{{ answer.id }}</td>
                     <td>{{ answer.date|format_date('long')}}</td>
+                    <td>{{ answer.title }}</td>
                     <td>{{ answer.content }}</td>
                     <td>{{ answer.indication }}</td>
+                    <td>{{ answer.author.email }}</td>
                     <td>
+                        {% if is_granted('VIEW', answer) %}
                         <a href="{{ url('answer_show', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_view'|trans }}
                         </a>
+                        {% endif %}
+                        {% if is_granted('EDIT', answer) %}
                         <a href="{{ url('answer_edit', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_edit'|trans }}
                         </a>
+                        {% endif %}
+                        {% if is_granted('DELETE', answer) %}
                         <a href="{{ url('answer_delete', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_delete'|trans }}
                         </a>
-
+                        {% endif %}
                     </td>
 
                 </tr>

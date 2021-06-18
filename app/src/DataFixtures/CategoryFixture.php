@@ -6,12 +6,13 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Class CategoryFixtures.
  */
-class CategoryFixture extends AbstractBaseFixtures
+class CategoryFixture extends AbstractBaseFixtures implements DependentFixtureInterface
 {
     /**
      * Load data.
@@ -23,11 +24,15 @@ class CategoryFixture extends AbstractBaseFixtures
         $this->createMany(10, 'categories', function ($i) {
             $category = new Category();
             $category->setName($this->faker->word);
-
+            $category->setAuthor($this->getRandomReference('users'));
             return $category;
         });
 
 
         $manager->flush();
+    }
+    public function getDependencies(): array
+    {
+        return [UserFixtures::class];
     }
 }

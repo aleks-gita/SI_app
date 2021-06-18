@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'title_question_list'|trans}}
+    {{ 'title_category_list'|trans}}
 {% endblock %}
 
 {% block body %}
@@ -21,24 +21,37 @@
             </tr>
             </thead>
             <tbody>
+                {% if is_granted('ROLE_USER','ROLE_ADMIN') %}
+                <a href="{{ url('category_create') }}" title="view" id="view_button">
+                    {{ 'category_create'|trans }}
+                </a>
+                {% endif %}
+
             {% for category in pagination.items %}
                 <tr>
                     <td>{{ category.id }}</td>
                     <td>{{ category.name }}</td>
                     <td>
 
+
                         <a href="{{ url('category_show', {id: category.id}) }}" title="view" id="view_button">
                             {{ 'category_view'|trans }}
                         </a>
+
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ url('category_edit', {id: category.id}) }}" title="view" id="view_button">
                             {{ 'action_edit'|trans }}
                         </a>
+                        {% endif %}
                     </td>
                     <td>
-                        {% if not category.questions|length %}
-                        <a href="{{ url('category_delete', {id: category.id}) }}" title="view" id="view_button">
-                            {{ 'action_delete'|trans }}
-                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {% if not category.questions|length %}
+                            <a href="{{ url('category_delete', {id: category.id}) }}" title="view" id="view_button">
+                                {{ 'action_delete'|trans }}
+                            </a>
+
+                            {% endif %}
                         {% endif %}
                     </td>
 

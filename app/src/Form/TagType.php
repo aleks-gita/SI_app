@@ -1,21 +1,20 @@
 <?php
 /**
- * Answer type.
+ * Tag type.
  */
 
 namespace App\Form;
 
-use App\Entity\Answer;
+use App\Entity\Tag;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class AnswerType.
+ * Class TagType.
  */
-class AnswerType extends AbstractType
+class TagType extends AbstractType
 {
     /**
      * Builds the form.
@@ -39,24 +38,6 @@ class AnswerType extends AbstractType
                 'attr' => ['max_length' => 64],
             ]
         );
-        $builder->add(
-            'content',
-            TextType::class,
-            [
-                'label' => 'label_content',
-                'required' => true,
-                'attr' => ['max_length' => 255],
-            ]
-        );
-        $builder->add(
-            'indication',
-            CheckboxType::class,
-            [
-
-                'label' => 'label_indication',
-                'required' => true,
-            ]
-        );
     }
 
     /**
@@ -66,7 +47,7 @@ class AnswerType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => Answer::class]);
+        $resolver->setDefaults(['data_class' => Tag::class]);
     }
 
     /**
@@ -79,6 +60,6 @@ class AnswerType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'answer';
+        return 'tag';
     }
 }

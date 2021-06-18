@@ -53,7 +53,7 @@ class AnswerController extends AbstractController
     public function index(Request $request, AnswerRepository $answerRepository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $answerRepository->queryAll(),
+            $answerRepository->queryByAuthor($this->getUser()),
             $request->query->getInt('page', 1),
             AnswerRepository::PAGINATOR_ITEMS_PER_PAGE
         );
@@ -76,9 +76,18 @@ class AnswerController extends AbstractController
      *     name="answer_show",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     * @IsGranted(
+     *     "VIEW",
+     *     subject="answer",
+     * )
      */
     public function show(Answer $answer): Response
     {
+        if ($answer->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('answer_index');
+        }
         return $this->render(
             'answer/show.html.twig',
             ['answer' => $answer]
@@ -110,12 +119,17 @@ class AnswerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $answer->setAuthor($this->getUser());
             $answer->setDate(new \DateTime());
             $answerRepository->save($answer);
 
             return $this->redirectToRoute('answer_index');
         }
+        if ($answer->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
 
+            return $this->redirectToRoute('answer_index');
+        }
         return $this->render(
             'answer/create.html.twig',
             ['form' => $form->createView()]
@@ -139,6 +153,10 @@ class AnswerController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="answer_edit",
      * )
+     * @IsGranted(
+     *     "EDIT",
+     *     subject="answer",
+     * )
      */
     public function edit(Request $request, Answer $answer, AnswerRepository $answerRepository): Response
     {
@@ -151,7 +169,11 @@ class AnswerController extends AbstractController
 
             return $this->redirectToRoute('answer_index');
         }
+        if ($answer->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
 
+            return $this->redirectToRoute('answer_index');
+        }
         return $this->render(
             'answer/edit.html.twig',
             [
@@ -176,6 +198,10 @@ class AnswerController extends AbstractController
      *     methods={"GET", "DELETE"},
      *     requirements={"id": "[1-9]\d*"},
      *     name="answer_delete",
+     * )
+     * @IsGranted(
+     *     "DELETE",
+     *     subject="answer",
      * )
      */
     public function delete(Request $request, Answer $answer, AnswerRepository $answerRepository): Response

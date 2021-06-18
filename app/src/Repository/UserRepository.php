@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -17,6 +18,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+
+    const PAGINATOR_ITEMS_PER_PAGE = 10;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -34,6 +38,63 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+    /**
+     * Query all records.
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryAll(): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder()
+            -> orderBy('user.id', 'DESC');
+    }
+    /**
+     * Get or create new query builder.
+     *
+     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    {
+        return $queryBuilder ?? $this->createQueryBuilder('user');
+
+    }
+    /**
+     * Save record.
+     *
+     * @param \App\Entity\User $user User entity
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(User $user): void
+    {
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+    /**
+     * Delete record.
+     *
+     * @param \App\Entity\User $user User entity
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(User $user): void
+    {
+        $this->_em->remove($user);
+        $this->_em->flush();
+    }
+    public function loadUserByUsername($username): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        $queryBuilder->andWhere('user.email = :email')
+            ->setParameter('email', $username);
+
+        return $queryBuilder;
     }
 
     // /**

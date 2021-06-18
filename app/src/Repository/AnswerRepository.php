@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Answer;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -45,7 +46,8 @@ class AnswerRepository extends ServiceEntityRepository
     {
         return $this->getOrCreateQueryBuilder()
 
-            -> orderBy('answer.date', 'DESC');
+            -> orderBy('answer.date',  'DESC');
+
     }
 
     /**
@@ -78,6 +80,22 @@ class AnswerRepository extends ServiceEntityRepository
     {
         $this->_em->remove($answer);
         $this->_em->flush();
+    }
+    /**
+     * Query tasks by author.
+     *
+     * @param \App\Entity\User $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        $queryBuilder->andWhere('answer.author = :author')
+            ->setParameter('author', $user);
+
+        return $queryBuilder;
     }
     // /**
     //  * @return Answer[] Returns an array of Answer objects

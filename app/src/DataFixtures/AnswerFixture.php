@@ -29,7 +29,7 @@ class AnswerFixture extends AbstractBaseFixtures implements DependentFixtureInte
             $answer->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $answer->setIndication($this->faker->boolean());
             $answer->setQuestion($this->getRandomReference('questions'));
-
+            $answer->setAuthor($this->getRandomReference('users'));
 
             return $answer;
         });
@@ -44,6 +44,6 @@ class AnswerFixture extends AbstractBaseFixtures implements DependentFixtureInte
      */
     public function getDependencies(): array
     {
-        return [QuestionFixture::class];
+        return [QuestionFixture::class, UserFixtures::class];
     }
 }

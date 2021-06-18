@@ -85,6 +85,12 @@ class Category
     private $code;
 
     /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
      * Getter for Id.
      *
      * @return int|null Result
@@ -146,6 +152,18 @@ class Category
     public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

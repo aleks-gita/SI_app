@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 
@@ -51,15 +53,19 @@ class QuestionController extends AbstractController
 
     public function index(Request $request): Response
     {
+
+
         $pagination = $this->paginator->paginate(
-          $this->questionRepository->queryAll(),
+          $this->questionRepository->queryByAuthor($this->getUser()),
           $request->query->getInt('page', 1),
-            QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
+          QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
         );
+
+
 
         return $this->render(
             'question/index.html.twig',
-            ['pagination'=>$pagination]
+            ['pagination'=>$pagination],
         );
     }
     /**
@@ -86,6 +92,7 @@ class QuestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $question->setAuthor($this->getUser());
             $questionRepository->save($question);
             $this->addFlash('success', 'message_created_successfully');
 
@@ -116,6 +123,10 @@ class QuestionController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="question_edit",
      * )
+     * @IsGranted(
+     *     "EDIT",
+     *     subject="question",
+     * )
      */
     public function edit(Request $request, Question $question, QuestionRepository $questionRepository): Response
     {
@@ -125,6 +136,12 @@ class QuestionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $questionRepository->save($question);
             $this->addFlash('success', 'message_updated_successfully');
+
+            return $this->redirectToRoute('question_index');
+        }
+
+        if ($question->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('question_index');
         }
@@ -156,6 +173,10 @@ class QuestionController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="question_delete",
      * )
+     * @IsGranted(
+     *     "DELETE",
+     *     subject="question",
+     * )
      */
     public function delete(Request $request, Question $question, QuestionRepository $questionRepository): Response
     {
@@ -171,6 +192,12 @@ class QuestionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $questionRepository->delete($question);
             $this->addFlash('success', 'message_deleted_successfully');
+
+            return $this->redirectToRoute('question_index');
+        }
+
+        if ($question->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('question_index');
         }
@@ -198,9 +225,18 @@ class QuestionController extends AbstractController
      *     name="question_show",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     * @IsGranted(
+     *     "VIEW",
+     *     subject="question",
+     * )
      */
     public function show(Question $question): Response
     {
+        if ($question->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('question_index');
+        }
         return $this->render(
             'question/show.html.twig',
             ['question' => $question]

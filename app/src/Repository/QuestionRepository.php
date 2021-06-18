@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Question;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -65,11 +66,10 @@ class QuestionRepository extends ServiceEntityRepository
         return $this->getOrCreateQueryBuilder()
             ->select(
                 'partial question.{id, date, title, content}',
-                'partial category.{id, name}',
                 'partial tags.{id,title}'
 
             )
-            ->join('question.category', 'category')
+           // ->join('question.category', 'category')
 
             ->leftJoin('question.tags', 'tags')
             -> orderBy('question.date', 'DESC');
@@ -79,6 +79,22 @@ class QuestionRepository extends ServiceEntityRepository
         return $queryBuilder ?? $this->createQueryBuilder('question');
     }
 
+    /**
+     * Query questions by author.
+     *
+     * @param \App\Entity\User $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        $queryBuilder->andWhere('question.author = :author')
+            ->setParameter('author', $user);
+
+        return $queryBuilder;
+    }
 
 
     // /**
