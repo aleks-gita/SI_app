@@ -7,10 +7,12 @@ namespace App\Form;
 
 use App\Entity\Answer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class AnswerType.
@@ -48,15 +50,19 @@ class AnswerType extends AbstractType
                 'attr' => ['max_length' => 255],
             ]
         );
-        $builder->add(
-            'indication',
-            CheckboxType::class,
-            [
 
-                'label' => 'label_indication',
-                'required' => true,
-            ]
-        );
+
+        //if ($this->isGranted('ROLE_ADMIN')) {
+            $builder->add(
+                'indication',
+                CheckboxType::class,
+                [
+
+                    'label' => 'label_indication',
+                    'required' => true,
+                ]
+            );
+       // }
     }
 
     /**

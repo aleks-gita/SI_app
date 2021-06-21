@@ -16,14 +16,14 @@
             <thead>
             <tr>
                 <th>{{ knp_pagination_sortable(pagination, 'label_id'|trans, 'category.id') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label_name'|trans, 'category.name' ) }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label_title'|trans, 'category.name' ) }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
-                {% if is_granted('ROLE_USER','ROLE_ADMIN') %}
+                {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ url('category_create') }}" title="view" id="view_button">
-                    {{ 'category_create'|trans }}
+                    {{ 'action_create'|trans }}
                 </a>
                 {% endif %}
 
@@ -33,11 +33,11 @@
                     <td>{{ category.name }}</td>
                     <td>
 
-
+                        {% if is_granted('ROLE_USER') %}
                         <a href="{{ url('category_show', {id: category.id}) }}" title="view" id="view_button">
-                            {{ 'category_view'|trans }}
+                            {{ 'action_view'|trans }}
                         </a>
-
+                        {% endif %}
                         {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ url('category_edit', {id: category.id}) }}" title="view" id="view_button">
                             {{ 'action_edit'|trans }}

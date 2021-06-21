@@ -6,6 +6,62 @@
                  <source>title_question_list</source>
                  <target>Q and A</target>
             </trans-unit>
+            <trans-unit id="title_answer_list">
+                    <source>title_answer_list</source>
+                   <target>Answers</target>
+               </trans-unit>
+                 <trans-unit id="title_category_list">
+                        <source>title_category_list</source>
+                       <target>Category list</target>
+                   </trans-unit>
+                   <trans-unit id="title_tag_list">
+                        <source>title_tag_list</source>
+                       <target>Tag list</target>
+                   </trans-unit>
+                 <trans-unit id="title_user_list">
+                        <source>title_user_list</source>
+                         <target>Users list</target>
+                  </trans-unit>
+               <trans-unit id="menu_answer">
+                   <source>menu_answer</source>
+                   <target>Answers</target>
+                </trans-unit>
+                <trans-unit id="menu_question">
+                 <source>menu_question</source>
+                  <target>Questions</target>
+                 </trans-unit>
+               <trans-unit id="menu_category">
+                      <source>menu_category</source>
+                      <target>Categories</target>
+                   </trans-unit>
+                <trans-unit id="menu_tag">
+                    <source>menu_tag</source>
+                   <target>Tags</target>
+                 </trans-unit>
+                <trans-unit id="menu_user">
+                  <source>menu_user</source>
+                  <target>Users</target>
+                </trans-unit>
+                   <trans-unit id="Log_in">
+                     <source>Log_in</source>
+                     <target>Log in!</target>
+                 </trans-unit>
+                 <trans-unit id="please_sign_in">
+                      <source>please_sign_in</source>
+                      <target>Please sign in</target>
+                 </trans-unit>
+                   <trans-unit id="password">
+                        <source>password</source>
+                       <target>Password</target>
+                     </trans-unit>
+                 <trans-unit id="email">
+                        <source>email</source>
+                       <target>Email</target>
+                     </trans-unit>
+                <trans-unit id="sign_in">
+                        <source>sign_in</source>
+                       <target>Sign in</target>
+                     </trans-unit>
             <trans-unit id="label_actions">
                 <source>label_actions</source>
                 <target>Actions</target>
@@ -38,10 +94,117 @@
                  <source>label_content</source>
                  <target>Content</target>
             </trans-unit>
+            <trans-unit id="label_category">
+               <source>label_category</source>
+                <target>Category</target>
+            </trans-unit>
+             <trans-unit id="label_author">
+              <source>label_author</source>
+             <target>Author</target>
+            </trans-unit>
+            <trans-unit id="label_indication">
+                <source>label_indication</source>
+                <target>Indication</target>
+             </trans-unit>
+             <trans-unit id="label_email">
+                     <source>label_email</source>
+                     <target>Email</target>
+                 </trans-unit>
             <trans-unit id="action_view">
                  <source>action_view</source>
                  <target>View</target>
             </trans-unit>
+            <trans-unit id="action_edit">
+                 <source>action_edit</source>
+                 <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="action_delete">
+                     <source>action_delete</source>
+                     <target>Delete</target>
+               </trans-unit>
+                <trans-unit id="action_create">
+                       <source>action_create</source>
+                       <target>Create</target>
+               </trans-unit>
+              <trans-unit id="user_create">
+                  <source>user_create</source>
+                  <target>Add user</target>
+               </trans-unit>
+             <trans-unit id="action_login">
+          <source>action_login</source>
+               <target>Log in</target>
+               </trans-unit>
+            <trans-unit id="answer_create">
+                        <source>answer_create</source>
+                <target>Create answer</target>
+                </trans-unit>
+                <trans-unit id="tag_create">
+                                   <source>tag_create</source>
+                                  <target>Add tag</target>
+                             </trans-unit>
+                <trans-unit id="name_tag_create">
+                   <source>name_tag_create</source>
+                    <target>Create tag</target>
+               </trans-unit>
+
+                <trans-unit id="category_create">
+                               <source>category_create</source>
+                               <target>Add category</target>
+                            </trans-unit>
+
+                <trans-unit id="name_category_create">
+                              <source>name_category_create</source>
+                              <target>Add category</target>
+                       </trans-unit>
+               <trans-unit id="title_answer_create">
+                       <source>title_answer_create</source>
+                      <target>Create Answer</target>
+                    </trans-unit>
+                     <trans-unit id="title_answer_delete">
+                         <source>title_answer_delete</source>
+                        <target>Delete answer</target>
+                      </trans-unit>
+
+               <trans-unit id="action_logout">
+                <source>action_logout</source>
+                  <target>Log out</target>
+             </trans-unit>
+            <trans-unit id="action_save">
+                 <source>action_save</source>
+                 <target>Save</target>
+            </trans-unit>
+             <trans-unit id="make_account">
+                <source>make_account</source>
+                 <target>Make account</target>
+               </trans-unit>
+            <trans-unit id="title_question_edit">
+                  <source>title_question_edit</source>
+                   <target>Edit question</target>
+              </trans-unit>
+             <trans-unit id="title_category_edit">
+                                 <source>title_category_edit</source>
+                                  <target>Edit category</target>
+                                 </trans-unit>
+            <trans-unit id="title_tag_edit">
+                 <source>title_tag_edit</source>
+                <target>Edit tag</target>
+               </trans-unit>
+            <trans-unit id="title_tag_delete">
+                   <source>title_tag_delete</source>
+              <target>Delete tag</target>
+                 </trans-unit>
+            <trans-unit id="communicate_delete">
+                               <source>communicate_delete</source>
+                               <target>Are you sure?</target>
+                      </trans-unit>
+            <trans-unit id="name_question_create">
+                           <source>name_question_create</source>
+                           <target>Create question</target>
+                  </trans-unit>
+            <trans-unit id="label_none">
+                  <source>label_none</source>
+                  <target>Empty</target>
+              </trans-unit>
             <trans-unit id="action_back_to_list">
                  <source>action_back_to_list</source>
                  <target>Back to the list</target>
@@ -50,6 +213,18 @@
                  <source>title_question_details</source>
                  <target>Question details #%id%</target>
              </trans-unit>
+            <trans-unit id="title_answer_details">
+                <source>title_answer_details</source>
+                <target>Answer details </target>
+              </trans-unit>
+                <trans-unit id="title_category_details">
+                   <source>title_category_details</source>
+                   <target>Category details </target>
+                 </trans-unit>
+           <trans-unit id="title_tag_details">
+                         <source>title_tag_details</source>
+                           <target>Tag details</target>
+                       </trans-unit>
         </body>
     </file>
 </xliff>

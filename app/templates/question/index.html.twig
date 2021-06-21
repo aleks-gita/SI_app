@@ -27,10 +27,11 @@
             </tr>
             </thead>
             <tbody>
-
+                {% if is_granted('ROLE_USER' )%}
                 <a href="{{ url('question_create') }}" title="view" id="view_button">
                     {{ 'question_create'|trans }}
                 </a>
+                    {% endif %}
 
             {% for question in pagination.items %}
             <tr>
@@ -49,21 +50,22 @@
                 </td>
                 <td>{{ question.author.email }}</td>
                 <td>
-                    {% if is_granted('VIEW', question) %}
+
                     <a href="{{ url('question_show', {id: question.id}) }}" title="view" id="view_button">
                         {{ 'action_view'|trans }}
                     </a>
-                    {% endif %}
-                    {% if is_granted('EDIT', question) %}
+
+                    {% if is_granted('ROLE_USER') and ('ROLE_ADMIN')  == false %}
                     <a href="{{ url('question_edit', {id: question.id}) }}" title="view" id="view_button">
                         {{ 'action_edit'|trans }}
                     </a>
                     {% endif %}
-                    {% if is_granted('DELETE', question) %}
+                    {% if is_granted('ROLE_USER') %}
                     <a href="{{ url('question_delete', {id: question.id}) }}" title="view" id="view_button">
                         {{ 'action_delete'|trans }}
                     </a>
                     {% endif %}
+
 
                 </td>
 

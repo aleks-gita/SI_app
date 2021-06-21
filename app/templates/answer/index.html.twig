@@ -40,17 +40,17 @@
                     <td>{{ answer.indication }}</td>
                     <td>{{ answer.author.email }}</td>
                     <td>
-                        {% if is_granted('VIEW', answer) %}
+
                         <a href="{{ url('answer_show', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_view'|trans }}
                         </a>
-                        {% endif %}
-                        {% if is_granted('EDIT', answer) %}
+
+                        {% if is_granted('ROLE_USER') and ('ROLE_ADMIN')  == false %}
                         <a href="{{ url('answer_edit', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_edit'|trans }}
                         </a>
                         {% endif %}
-                        {% if is_granted('DELETE', answer) %}
+                        {% if is_granted('ROLE_USER') %}
                         <a href="{{ url('answer_delete', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_delete'|trans }}
                         </a>

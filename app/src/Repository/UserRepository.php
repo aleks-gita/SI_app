@@ -28,6 +28,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     * @param UserInterface $user
+     * @param string $newEncodedPassword
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
@@ -39,6 +41,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->persist($user);
         $this->_em->flush();
     }
+
     /**
      * Query all records.
      *
@@ -87,12 +90,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->remove($user);
         $this->_em->flush();
     }
-    public function loadUserByUsername($username): QueryBuilder
+    public function findOneByEmail($email): QueryBuilder
     {
-        $queryBuilder = $this->queryAll();
+       $queryBuilder = $this->queryAll();
 
         $queryBuilder->andWhere('user.email = :email')
-            ->setParameter('email', $username);
+            ->setParameter('email', $email);
 
         return $queryBuilder;
     }

@@ -53,16 +53,30 @@ class QuestionController extends AbstractController
 
     public function index(Request $request): Response
     {
+        if ($this->isGranted('ROLE_ADMIN')){
 
+            $pagination = $this->paginator->paginate(
+                $this->questionRepository->queryAll(),
+                $request->query->getInt('page', 1),
+                QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
+            );
+        }
+        elseif ($this->isGranted('ROLE_USER')) {
+            $pagination = $this->paginator->paginate(
+                $this->questionRepository->queryByAuthor($this->getUser()),
+                $request->query->getInt('page', 1),
+                QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
+            );
+        }
 
+        else{
         $pagination = $this->paginator->paginate(
-          $this->questionRepository->queryByAuthor($this->getUser()),
-          $request->query->getInt('page', 1),
-          QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
+            $this->questionRepository->queryAll(),
+            $request->query->getInt('page', 1),
+            QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
         );
 
-
-
+     }
         return $this->render(
             'question/index.html.twig',
             ['pagination'=>$pagination],
@@ -84,6 +98,7 @@ class QuestionController extends AbstractController
      *     methods={"GET", "POST"},
      *     name="question_create",
      * )
+     * @IsGranted("ROLE_USER")
      */
     public function create(Request $request, QuestionRepository $questionRepository): Response
     {
@@ -124,7 +139,7 @@ class QuestionController extends AbstractController
      *     name="question_edit",
      * )
      * @IsGranted(
-     *     "EDIT",
+     *    "EDIT",
      *     subject="question",
      * )
      */
@@ -174,42 +189,54 @@ class QuestionController extends AbstractController
      *     name="question_delete",
      * )
      * @IsGranted(
-     *     "DELETE",
-     *     subject="question",
+     *     "ROLE_USER",
+     *
      * )
      */
     public function delete(Request $request, Question $question, QuestionRepository $questionRepository): Response
     {
 
 
-        $form = $this->createForm(FormType::class, $question, ['method' => 'DELETE']);
-        $form->handleRequest($request);
 
-        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-            $form->submit($request->request->get($form->getName()));
+            $form = $this->createForm(FormType::class, $question, ['method' => 'DELETE']);
+            $form->handleRequest($request);
+
+            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+                $form->submit($request->request->get($form->getName()));
+            }
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $questionRepository->delete($question);
+                $this->addFlash('success', 'message_deleted_successfully');
+
+                return $this->redirectToRoute('question_index');
+            }
+            if ($this->isGranted('ROLE_ADMIN')){
+                return $this->render(
+                    'question/delete.html.twig',
+                    [
+                        'form' => $form->createView(),
+                        'question' => $question,
+                    ]
+                );
+            }
+            if ($this->isGranted('ROLE_USER')) {
+                if ($question->getAuthor() !== $this->getUser()) {
+                    $this->addFlash('warning', 'message.item_not_found');
+
+                    return $this->redirectToRoute('question_index');
+                }
+
+                return $this->render(
+                    'question/delete.html.twig',
+                    [
+                        'form' => $form->createView(),
+                        'question' => $question,
+                    ]
+                );
+            }
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $questionRepository->delete($question);
-            $this->addFlash('success', 'message_deleted_successfully');
-
-            return $this->redirectToRoute('question_index');
-        }
-
-        if ($question->getAuthor() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('question_index');
-        }
-
-        return $this->render(
-            'question/delete.html.twig',
-            [
-                'form' => $form->createView(),
-                'question' => $question,
-            ]
-        );
-    }
 
 
     /**
@@ -225,22 +252,33 @@ class QuestionController extends AbstractController
      *     name="question_show",
      *     requirements={"id": "[1-9]\d*"},
      * )
-     * @IsGranted(
-     *     "VIEW",
-     *     subject="question",
-     * )
+     *
      */
     public function show(Question $question): Response
     {
-        if ($question->getAuthor() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('question_index');
+        if ($this->isGranted('ROLE_ADMIN')){
+            return $this->render(
+                'question/show.html.twig',
+                ['question' => $question]
+            );
         }
-        return $this->render(
-            'question/show.html.twig',
-            ['question' => $question]
-        );
+        if ($this->isGranted('ROLE_USER')) {
+            if ($question->getAuthor() !== $this->getUser()) {
+                $this->addFlash('warning', 'message.item_not_found');
+
+                return $this->redirectToRoute('question_index');
+            }
+            return $this->render(
+                'question/show.html.twig',
+                ['question' => $question]
+            );
+        }
+        if ($this->isGranted('ROLE_USER') == false){
+            return $this->render(
+                'question/show.html.twig',
+                ['question' => $question]
+            );
+        }
     }
 
 }

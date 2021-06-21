@@ -17,18 +17,23 @@
         </div>
     {% else %}
         <div>
-            <a href="{{ url('question_index') }}">{{ 'action_login'|trans }}</a>
+            <a href="{{ url('app_login') }}">{{ 'action_login'|trans }}</a>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_USER') == false %}
+        <div>
+            <a href="{{ url('user_create') }}">{{ 'make_account'|trans }}</a>
         </div>
     {% endif %}
 </div>
+<div class="menu">
 <nav id="menu">
     <ul>
-
-        <li><a href="{{ url('answer_index')}}" title="view">
-                {{ 'menu_answer'|trans }}
-            </a></li>
         <li><a href="{{ url('question_index') }}" title="view">
                 {{ 'menu_question'|trans }}
+            </a></li>
+        <li><a href="{{ url('answer_index')}}" title="view">
+                {{ 'menu_answer'|trans }}
             </a></li>
         <li><a href="{{ url('category_index') }}" title="view">
                 {{ 'menu_category'|trans }}
@@ -43,6 +48,7 @@
         {% endif %}
     </ul>
 </nav>
+</div>
 
 
 <div class="container-fluid">

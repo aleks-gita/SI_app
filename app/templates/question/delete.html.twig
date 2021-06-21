@@ -8,12 +8,12 @@
     <h1>{{ 'title_question_delete'|trans({'%id%': question.id|default('')}) }}</h1>
     {{ form_start(form, { method: 'DELETE', action: url('question_delete', {id: question.id}) }) }}
     {{ form_widget(form) }}
-    <p> Czy na pewno chcesz to usunąć? </p>
+    <p>{{ 'communicate_delete'|trans}}</p>
     <div class="form-group row float-sm-right">
-        <input type="submit" value="{{ 'action_save'|trans }}" class="btn btn-primary" />
+        <input type="submit" value="{{ 'action_save'|trans }}" id="back_button" />
     </div>
     <div class="form-group row float-sm-left">
-        <a href="{{ url('question_index') }}" class="btn btn-link">
+        <a href="{{ url('question_index') }}" id="back_button">
             {{ 'action_back_to_list'|trans }}
         </a>
     </div>

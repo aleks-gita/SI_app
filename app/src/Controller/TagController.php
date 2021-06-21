@@ -69,6 +69,10 @@ class TagController extends AbstractController
      *     name="tag_show",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     * @IsGranted("ROLE_USER",
+     *     "EDIT",
+     *     subject="tag",
+     * )
      *
      *
      */
@@ -95,7 +99,7 @@ class TagController extends AbstractController
      *     methods={"GET", "POST"},
      *     name="tag_create",
      * )
-     *
+     * @IsGranted("ROLE_USER")
      */
     public function create(Request $request, TagRepository $tagRepository): Response
     {
@@ -136,7 +140,7 @@ class TagController extends AbstractController
      *     name="tag_edit",
      *
      * )
-     * @IsGranted("ROLE_ADMIN",
+     * @IsGranted("ROLE_USER",
      *     "EDIT",
      *     subject="tag",
      * )
@@ -182,7 +186,7 @@ class TagController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="tag_delete",
      * )
-     *@IsGranted("ROLE_ADMIN",
+     *@IsGranted("ROLE_USER",
      *     "DELETE",
      *     subject="tag",
      * )

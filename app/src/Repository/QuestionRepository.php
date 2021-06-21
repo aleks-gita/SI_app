@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Question;
+use App\Entity\Answer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -66,10 +67,12 @@ class QuestionRepository extends ServiceEntityRepository
         return $this->getOrCreateQueryBuilder()
             ->select(
                 'partial question.{id, date, title, content}',
-                'partial tags.{id,title}'
-
+                'partial tags.{id,title}',
+                //'partial answers.{questions_id}'
             )
-           // ->join('question.category', 'category')
+          // ->join('answers', 'questions')
+           //->where('questions.id = answers.questions_id')
+           //->join('question.category', 'category')
 
             ->leftJoin('question.tags', 'tags')
             -> orderBy('question.date', 'DESC');
@@ -78,6 +81,8 @@ class QuestionRepository extends ServiceEntityRepository
     {
         return $queryBuilder ?? $this->createQueryBuilder('question');
     }
+
+
 
     /**
      * Query questions by author.

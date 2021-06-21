@@ -16,6 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+
 /**
  * Class UserController.
  *
@@ -37,14 +42,17 @@ class UserController extends AbstractController
      *     methods={"GET"},
      *     name="user_index",
      * )
+     *@IsGranted(
+     *     "ROLE_ADMIN"
      *
+     * )
      *
      *
      */
     public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $userRepository->loadUserByUsername($this->getUser()),
+            $userRepository->queryAll(),
             $request->query->getInt('page', 1),
             UserRepository::PAGINATOR_ITEMS_PER_PAGE
         );
@@ -72,12 +80,7 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
-        if ($user->loadUserByUsername() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('user_index');
-        }
-        return $this->render(
+       return $this->render(
             'user/show.html.twig',
             ['user' => $user]
         );
@@ -164,6 +167,7 @@ class UserController extends AbstractController
             ]
         );
     }
+
     /**
      * Delete action.
      *

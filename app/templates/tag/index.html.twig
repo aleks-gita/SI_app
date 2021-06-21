@@ -35,19 +35,19 @@
                     <td>{{ tag.title }}</td>
                     <td>
 
-
+                        {% if is_granted('ROLE_USER') %}
                         <a href="{{ url('tag_show', {id: tag.id}) }}" title="view" id="view_button">
                             {{ 'action_view'|trans }}
                         </a>
-
-                        {% if is_granted('ROLE_ADMIN') %}
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
                             <a href="{{ url('tag_edit', {id: tag.id}) }}" title="view" id="view_button">
                                 {{ 'action_edit'|trans }}
                             </a>
                         {% endif %}
-                    </td>
-                    <td>
-                        {% if is_granted('ROLE_ADMIN') %}
+
+
+                        {% if is_granted('ROLE_USER') %}
                             {% if not tag.questions|length %}
                                 <a href="{{ url('tag_delete', {id: tag.id}) }}" title="view" id="view_button">
                                     {{ 'action_delete'|trans }}
