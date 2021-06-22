@@ -5,9 +5,13 @@ namespace App\Repository;
 use App\Entity\Question;
 use App\Entity\Answer;
 use App\Entity\User;
+use App\Service\UserInterface;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use App\Entity\Category;
+use App\Entity\Tag;
 
 /**
  * @method Question|null find($id, $lockMode = null, $lockVersion = null)
@@ -61,21 +65,29 @@ class QuestionRepository extends ServiceEntityRepository
         $this->_em->remove($question);
         $this->_em->flush();
     }
-
-    public function queryAll(): QueryBuilder
+    /**
+     * Query all records.
+     *
+     * @param array $filters Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryAll(array $filters = []): QueryBuilder
     {
-        return $this->getOrCreateQueryBuilder()
+        $queryBuilder = $this->getOrCreateQueryBuilder()
             ->select(
-                'partial question.{id, date, title, content}',
-                'partial tags.{id,title}',
-                //'partial answers.{questions_id}'
-            )
-          // ->join('answers', 'questions')
-           //->where('questions.id = answers.questions_id')
-           //->join('question.category', 'category')
+                'partial question.{id, date, content, title}',
+                'partial category.{id, name}',
+                'partial tags.{id, title}',
 
+            )
+
+            ->join('question.category', 'category')
             ->leftJoin('question.tags', 'tags')
-            -> orderBy('question.date', 'DESC');
+            ->orderBy('question.date', 'DESC');
+        $queryBuilder = $this->applyFiltersToList($queryBuilder, $filters);
+
+        return $queryBuilder;
     }
     private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null ): QueryBuilder
     {
@@ -83,24 +95,44 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
 
-
     /**
      * Query questions by author.
      *
      * @param \App\Entity\User $user User entity
-     *
+     * @param array $filters
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
-    public function queryByAuthor(User $user): QueryBuilder
+    public function queryByAuthor(User $user, array $filters = []): QueryBuilder
     {
-        $queryBuilder = $this->queryAll();
+        $queryBuilder = $this->queryAll($filters);
 
         $queryBuilder->andWhere('question.author = :author')
             ->setParameter('author', $user);
 
         return $queryBuilder;
     }
+    /**
+     * Apply filters to paginated list.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder Query builder
+     * @param array                      $filters      Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function applyFiltersToList(QueryBuilder $queryBuilder, array $filters = []): QueryBuilder
+    {
+        if (isset($filters['category']) && $filters['category'] instanceof Category) {
+            $queryBuilder->andWhere('category = :category')
+                ->setParameter('category', $filters['category']);
+        }
 
+        if (isset($filters['tag']) && $filters['tag'] instanceof Tag) {
+            $queryBuilder->andWhere('tags IN (:tag)')
+                ->setParameter('tag', $filters['tag']);
+        }
+
+        return $queryBuilder;
+    }
 
     // /**
     //  * @return Question[] Returns an array of Question objects

@@ -6,8 +6,12 @@ namespace App\Controller;
 
 
 use App\Entity\Answer;
-use App\Repository\AnswerRepository;
+use App\Entity\Question;
+
+use App\Service\AnswerService;
 use App\Form\AnswerType;
+
+use App\Service\QuestionService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -27,16 +31,22 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class AnswerController extends AbstractController
 {
-    private AnswerRepository $answerRepository;
+    /**
+     * Answer service.
+     *
+     * @var \App\Service\AnswerService
+     */
+    private $answerService;
 
-    private PaginatorInterface $paginator;
-
-    public function __construct(AnswerRepository $answerRepository, PaginatorInterface $paginator)
+    /**
+     * AnswerController constructor.
+     *
+     * @param \App\Service\AnswerService $answerService Answer service
+     */
+    public function __construct(AnswerService $answerService)
     {
-        $this->answerRepository = $answerRepository;
-        $this-> paginator = $paginator;
+        $this->answerService = $answerService;
     }
-
 
     /**
      * Index action.
@@ -52,7 +62,7 @@ class AnswerController extends AbstractController
      * )
      */
 
-    public function index(Request $request, AnswerRepository $answerRepository, PaginatorInterface $paginator): Response
+    /*public function index(Request $request, AnswerRepository $answerRepository, PaginatorInterface $paginator): Response
     {
         if ($this->isGranted('ROLE_ADMIN')){
 
@@ -82,7 +92,41 @@ class AnswerController extends AbstractController
             'answer/index.html.twig',
             ['pagination' => $pagination]
         );
+    }*/
+    public function index(Request $request): Response
+    {
+
+        $filters = [];
+        $filters['question_id'] = $request->query->getInt('filters_question_id');
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+
+            $pagination = $this->answerService->createPaginatedList_not_author(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+
+        } elseif ($this->isGranted('ROLE_USER')) {
+
+            $pagination = $this->answerService->createPaginatedList_author(
+                $request->query->getInt('page', 1),
+                $this->getUser(),
+                $filters
+            );
+        } else {
+
+            $pagination = $this->answerService->createPaginatedList_not_author(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+
+        }
+        return $this->render(
+            'answer/index.html.twig',
+            ['pagination' => $pagination]
+        );
     }
+
     /**
      * Show action.
      *
@@ -100,6 +144,7 @@ class AnswerController extends AbstractController
      */
     public function show(Answer $answer): Response
     {
+
         if ($this->isGranted('ROLE_ADMIN')){
             return $this->render(
                 'answer/show.html.twig',
@@ -112,13 +157,13 @@ class AnswerController extends AbstractController
                 $this->addFlash('warning', 'message.item_not_found');
 
                 return $this->redirectToRoute('answer_index');
-
+            }
 
                 return $this->render(
                     'answer/show.html.twig',
                     ['answer' => $answer]
                 );
-            }
+
         }
         if ($this->isGranted('ROLE_USER') == false){
             return $this->render(
@@ -133,7 +178,7 @@ class AnswerController extends AbstractController
      * Answer action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\AnswerRepository        $answerRepository Answer repository
+     * @param \App\Service\AnswerService        $answerService Answer Service
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -146,7 +191,7 @@ class AnswerController extends AbstractController
      *     name="answer_create",
      * )
      */
-    public function create(Request $request, AnswerRepository $answerRepository): Response
+    public function create(Request $request): Response
     {
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer);
@@ -155,7 +200,7 @@ class AnswerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $answer->setAuthor($this->getUser());
             $answer->setDate(new \DateTime());
-            $answerRepository->save($answer);
+            $this->answerService->save($answer);
 
             return $this->redirectToRoute('answer_index');
         }
@@ -169,6 +214,24 @@ class AnswerController extends AbstractController
             ['form' => $form->createView()]
         );
     }
+    /**
+     * Answer action.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
+     * @param \App\Service\AnswerService        $answerService Answer Service
+     *
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @Route(
+     *     "/create_new",
+     *     methods={"GET", "POST"},
+     *     name="answer_create_new",
+     * )
+     */
+
     /**
      * Edit action.
      *
@@ -192,13 +255,13 @@ class AnswerController extends AbstractController
      *     subject="answer",
      * )
      */
-    public function edit(Request $request, Answer $answer, AnswerRepository $answerRepository): Response
+    public function edit(Request $request, Answer $answer): Response
     {
         $form = $this->createForm(AnswerType::class, $answer, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $answerRepository->save($answer);
+            $this->answerService->save($answer);
             $this->addFlash('success', 'message_updated_successfully');
 
             return $this->redirectToRoute('answer_index');
@@ -237,7 +300,7 @@ class AnswerController extends AbstractController
      *     "ROLE_USER",
      * )
      */
-    public function delete(Request $request, Answer $answer, AnswerRepository $answerRepository): Response
+    public function delete(Request $request, Answer $answer): Response
     {
 
 
@@ -249,7 +312,7 @@ class AnswerController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $answerRepository->delete($answer);
+            $this->answerService->delete($answer);
             $this->addFlash('success', 'message_deleted_successfully');
 
             return $this->redirectToRoute('answer_index');

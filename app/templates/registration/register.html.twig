@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'account_create'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'account_create'|trans }}</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password.first) }}
+        {{ form_row(form.password.second) }}
+
+    <div class="form-group row float-sm-right">
+        <input type="submit" value="{{ 'action_save'|trans }}" id="view_button" />
+    </div>
+    <div class="form-group row float-sm-left">
+        <a href="{{ url('question_index') }}" id="view_button">
+            {{ 'action_back_to_list'|trans }}
+        </a>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

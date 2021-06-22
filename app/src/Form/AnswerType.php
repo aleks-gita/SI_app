@@ -6,10 +6,13 @@
 namespace App\Form;
 
 use App\Entity\Answer;
+use App\Entity\Question;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -32,6 +35,20 @@ class AnswerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /*$builder->add(
+            'question',
+            EntityType::class,
+            [
+                'class' => Question::class,
+                'choice_label' => function ($question) {
+                    return $question->getTitle();
+                },
+                'label' => 'label_question',
+                'placeholder' => 'label_none',
+                'required' => true,
+            ]
+        );
+*/
         $builder->add(
             'title',
             TextType::class,
@@ -59,7 +76,7 @@ class AnswerType extends AbstractType
                 [
 
                     'label' => 'label_indication',
-                    'required' => true,
+                    'required' => false,
                 ]
             );
        // }

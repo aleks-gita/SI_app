@@ -95,4 +95,20 @@ class CategoryRepository extends ServiceEntityRepository
         $this->_em->remove($category);
         $this->_em->flush();
     }
+    /**
+     * Query questions by author.
+     *
+     * @param \App\Entity\User $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        $queryBuilder->andWhere('category.author = :author')
+            ->setParameter('author', $user);
+
+        return $queryBuilder;
+    }
 }

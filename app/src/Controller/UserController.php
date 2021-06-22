@@ -6,17 +6,18 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Service\UserService;
 use App\Form\UserType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Security\Core\User\UserInterface;
+
 
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -28,6 +29,24 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends AbstractController
 {
+    /**
+     * User service.
+     *
+     * @var \App\Service\UserService
+     */
+    private $userService;
+
+    /**
+     * AnswerController constructor.
+     *
+     * @param \App\Service\UserService $userService User service
+     */
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+
     /**
      * Index action.
      *
@@ -49,13 +68,10 @@ class UserController extends AbstractController
      *
      *
      */
-    public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request): Response
     {
-        $pagination = $paginator->paginate(
-            $userRepository->queryAll(),
-            $request->query->getInt('page', 1),
-            UserRepository::PAGINATOR_ITEMS_PER_PAGE
-        );
+        $page = $request->query->getInt('page', 1);
+        $pagination = $this->userService->createPaginatedList($page);
 
         return $this->render(
             'user/index.html.twig',
@@ -103,7 +119,7 @@ class UserController extends AbstractController
      * )
      *
      */
-    public function create(Request $request, UserRepository $userRepository): Response
+    /*public function create(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -111,7 +127,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             //$tag->setAuthor($this->getUser());
-            $userRepository->save($user);
+            $this->userService->save($user);
 
             $this->addFlash('success', 'message_created_successfully');
 
@@ -122,7 +138,7 @@ class UserController extends AbstractController
             'user/create.html.twig',
             ['form' => $form->createView()]
         );
-    }
+    }*/
     /**
      * Edit action.
      *
@@ -146,13 +162,13 @@ class UserController extends AbstractController
      *
      */
 
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserType::class, $user, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($user);
+            $this->userService->save($user);
 
             $this->addFlash('success', 'message_updated_successfully');
 
@@ -190,7 +206,7 @@ class UserController extends AbstractController
      *
      */
 
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(Request $request, User $user): Response
     {
         /*if($category->getCategory()->count()){
             $this->addFlash('warning', 'message_category_contains_questions');
@@ -206,7 +222,7 @@ class UserController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->delete($user);
+            $this->userService->delete($user);
             $this->addFlash('success', 'message_deleted_successfully');
 
             return $this->redirectToRoute('user_index');

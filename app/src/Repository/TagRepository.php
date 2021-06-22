@@ -39,7 +39,7 @@ class TagRepository extends ServiceEntityRepository
     public function queryAll(): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder()
-            -> orderBy('tag.date', 'DESC');
+           -> orderBy('tag.date', 'DESC');
     }
     /**
      * Get or create new query builder.

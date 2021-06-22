@@ -7,18 +7,16 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Form\QuestionType;
-use App\Repository\QuestionRepository;
+use App\Service\QuestionService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
-
-
 
 /**
  *Class QuestionController
@@ -27,14 +25,22 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class QuestionController extends AbstractController
 {
-    private QuestionRepository $questionRepository;
+    /**
+     *  Question service.
+     *
+     * @var \App\Service\ QuestionService
+     */
+    private $questionService;
 
-    private PaginatorInterface $paginator;
-
-    public function __construct(QuestionRepository $questionRepository, PaginatorInterface $paginator)
+    /**
+     *
+     *  QuestionController constructor.
+     *
+     * @param \App\Service\ QuestionService $questionService  Question service
+     */
+    public function __construct( QuestionService $questionService)
     {
-        $this-> questionRepository = $questionRepository;
-        $this-> paginator = $paginator;
+        $this->questionService = $questionService;
     }
 
     /**
@@ -51,7 +57,7 @@ class QuestionController extends AbstractController
      * )
      */
 
-    public function index(Request $request): Response
+    /*public function index(Request $request): Response
     {
         if ($this->isGranted('ROLE_ADMIN')){
 
@@ -80,8 +86,50 @@ class QuestionController extends AbstractController
         return $this->render(
             'question/index.html.twig',
             ['pagination'=>$pagination],
+        );*/
+
+    public function index(Request $request): Response
+    {
+
+        $filters = [];
+        $filters['category_id'] = $request->query->getInt('filters_category_id');
+        $filters['tag_id'] = $request->query->getInt('filters_tag_id');
+
+        if ($this->isGranted('ROLE_ADMIN') ) {
+
+
+            //$page = $request->query->getInt('page', 1);
+            $pagination = $this->questionService->createPaginatedList_not_author(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+
+        } elseif ($this->isGranted('ROLE_USER')) {
+
+            $pagination = $this->questionService->createPaginatedList_author(
+                $request->query->getInt('page', 1),
+                $this->getUser(),
+                $filters
+            );
+        } else {
+
+            $pagination = $this->questionService->createPaginatedList_not_author(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+
+        }
+
+        //$request->query->getInt('page', 1);
+        //pagination = $this->questionService->createPaginatedList($page);
+
+        return $this->render(
+            'question/index.html.twig',
+            ['pagination' => $pagination]
         );
+
     }
+
     /**
      * Create action.
      *
@@ -100,7 +148,7 @@ class QuestionController extends AbstractController
      * )
      * @IsGranted("ROLE_USER")
      */
-    public function create(Request $request, QuestionRepository $questionRepository): Response
+    public function create(Request $request): Response
     {
         $question = new Question();
         $form = $this->createForm(QuestionType::class, $question);
@@ -108,7 +156,7 @@ class QuestionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $question->setAuthor($this->getUser());
-            $questionRepository->save($question);
+            $this->questionService->save($question);
             $this->addFlash('success', 'message_created_successfully');
 
             return $this->redirectToRoute('question_index');
@@ -143,13 +191,13 @@ class QuestionController extends AbstractController
      *     subject="question",
      * )
      */
-    public function edit(Request $request, Question $question, QuestionRepository $questionRepository): Response
+    public function edit(Request $request, Question $question): Response
     {
         $form = $this->createForm(QuestionType::class, $question, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $questionRepository->save($question);
+            $this->questionService->save($question);
             $this->addFlash('success', 'message_updated_successfully');
 
             return $this->redirectToRoute('question_index');
@@ -193,7 +241,7 @@ class QuestionController extends AbstractController
      *
      * )
      */
-    public function delete(Request $request, Question $question, QuestionRepository $questionRepository): Response
+    public function delete(Request $request, Question $question): Response
     {
 
 
@@ -206,7 +254,7 @@ class QuestionController extends AbstractController
             }
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $questionRepository->delete($question);
+                $this->questionService->delete($question);
                 $this->addFlash('success', 'message_deleted_successfully');
 
                 return $this->redirectToRoute('question_index');

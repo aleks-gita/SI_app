@@ -35,7 +35,7 @@ class Answer
 
     /**
      * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="answers")
-     * @ORM\JoinTable(name="answers_questions")
+     *
      *
      */
     private $questions;

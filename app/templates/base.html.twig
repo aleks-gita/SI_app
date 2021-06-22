@@ -21,9 +21,9 @@
         </div>
     {% endif %}
     {% if is_granted('ROLE_USER') == false %}
-        <div>
-            <a href="{{ url('user_create') }}">{{ 'make_account'|trans }}</a>
-        </div>
+    <div>
+        <a href="{{ url('user_registration') }}">{{ 'make_account'|trans }}</a>
+    </div>
     {% endif %}
 </div>
 <div class="menu">

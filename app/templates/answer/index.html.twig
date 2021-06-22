@@ -45,7 +45,7 @@
                             {{ 'action_view'|trans }}
                         </a>
 
-                        {% if is_granted('ROLE_USER') and ('ROLE_ADMIN')  == false %}
+                        {% if is_granted('ROLE_USER') and is_granted('ROLE_ADMIN')  == false %}
                         <a href="{{ url('answer_edit', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_edit'|trans }}
                         </a>
@@ -55,6 +55,11 @@
                             {{ 'action_delete'|trans }}
                         </a>
                         {% endif %}
+
+                        <a href="{{ url('answer_index', {'filters_question_id' : answer.question.id}) }}" title="{{ answer.question.id }}">
+                            {{ answer.question.id }}
+                        </a>
+
                     </td>
 
                 </tr>

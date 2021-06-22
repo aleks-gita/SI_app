@@ -65,7 +65,8 @@ class Question
 
     /**
      * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question")
-     * @ORM\JoinTable(name="questions_answers")
+     * @ORM\JoinTable(name="answers_questions")
+     *
      *
      */
     private $answers;
@@ -145,11 +146,11 @@ class Question
 
     /**
      * @return Collection|Answer[]
-     */
+
     public function getAnswers(): Collection
     {
         return $this->answers;
-    }
+    }*/
 
     public function addAnswer(Answer $answer): self
     {
@@ -172,6 +173,7 @@ class Question
 
         return $this;
     }
+
 
     public function getTitle(): ?string
     {

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Answer;
+use App\Entity\Question;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -42,12 +43,19 @@ class AnswerRepository extends ServiceEntityRepository
      *
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
-    public function queryAll(): QueryBuilder
+    public function queryAll(array $filters = []): QueryBuilder
     {
-        return $this->getOrCreateQueryBuilder()
+            $queryBuilder = $this->getOrCreateQueryBuilder()
+                ->select(
+                    'partial answer.{id, date, content, title, indication}',
+                            'partial questions.{id, date, content, title}',
 
-            -> orderBy('answer.date',  'DESC');
+                )
+                     ->join('answer.questions', 'questions')
+                    -> orderBy('answer.date',  'DESC');
+        $queryBuilder = $this->applyFiltersToList($queryBuilder, $filters);
 
+        return $queryBuilder;
     }
 
     /**
@@ -81,22 +89,35 @@ class AnswerRepository extends ServiceEntityRepository
         $this->_em->remove($answer);
         $this->_em->flush();
     }
+
     /**
      * Query tasks by author.
      *
      * @param \App\Entity\User $user User entity
-     *
+     * @param array $filters
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
-    public function queryByAuthor(User $user): QueryBuilder
+    public function queryByAuthor(User $user, array $filters = []): QueryBuilder
     {
-        $queryBuilder = $this->queryAll();
+        $queryBuilder = $this->queryAll($filters);
 
         $queryBuilder->andWhere('answer.author = :author')
             ->setParameter('author', $user);
 
         return $queryBuilder;
     }
+    private function applyFiltersToList(QueryBuilder $queryBuilder, array $filters = []): QueryBuilder
+    {
+        if (isset($filters['question']) && $filters['question'] instanceof Question) {
+            $queryBuilder->andWhere('questions = :question')
+                ->setParameter('question', $filters['question']);
+        }
+
+
+        return $queryBuilder;
+    }
+
+
     // /**
     //  * @return Answer[] Returns an array of Answer objects
     //  */

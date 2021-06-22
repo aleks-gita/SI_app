@@ -13,6 +13,8 @@
             {{ knp_pagination_render(pagination) }}
         </div>
 
+
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -33,41 +35,54 @@
                 </a>
                     {% endif %}
 
+
             {% for question in pagination.items %}
-            <tr>
-                <td>{{ question.id }}</td>
-                <td>{{ question.content }}</td>
-                <td>{{ question.date|format_date('long')}}</td>
-                <td>{{ question.category.name }}</td>
-                <td>
-                    {% if question.tags is defined and question.tags|length %}
-                        {% for tag in question.tags %}
-                            {{ tag.title }}
-                        {% endfor %}
-                    {% else %}
-                        &nbsp;
-                    {% endif %}
-                </td>
-                <td>{{ question.author.email }}</td>
-                <td>
+                <tr>
+                    <td>{{ question.id }}</td>
+                    <td>{{ question.content }}</td>
+                    <td>{{ question.date|format_date('long')}}</td>
+                    <td> <a href="{{ url('question_index', {'filters_category_id' : question.category.id}) }}" title="{{ question.category.name }}">
+                            {{ question.category.name }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if question.tags is defined and question.tags|length %}
+                            {% for tag in question.tags %}
+                                <a href="{{ url('question_index', {'filters_tag_id' : tag.id}) }}" title="{{ tag.title }}">
+                                    {{ tag.title }}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </td>
+                    <td>{{ question.author.email }}</td>
+                    <td>
 
-                    <a href="{{ url('question_show', {id: question.id}) }}" title="view" id="view_button">
-                        {{ 'action_view'|trans }}
-                    </a>
+                        <a href="{{ url('question_show', {id: question.id}) }}" title="view" id="view_button">
+                            {{ 'action_view'|trans }}
+                        </a>
 
-                    {% if is_granted('ROLE_USER') and ('ROLE_ADMIN')  == false %}
-                    <a href="{{ url('question_edit', {id: question.id}) }}" title="view" id="view_button">
-                        {{ 'action_edit'|trans }}
-                    </a>
-                    {% endif %}
-                    {% if is_granted('ROLE_USER') %}
-                    <a href="{{ url('question_delete', {id: question.id}) }}" title="view" id="view_button">
-                        {{ 'action_delete'|trans }}
-                    </a>
-                    {% endif %}
+                        {% if is_granted('ROLE_USER') and is_granted('ROLE_ADMIN')  == false %}
+                        <a href="{{ url('question_edit', {id: question.id}) }}" title="view" id="view_button">
+                            {{ 'action_edit'|trans }}
+                        </a>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                        <a href="{{ url('question_delete', {id: question.id}) }}" title="view" id="view_button">
+                            {{ 'action_delete'|trans }}
+                        </a>
+                        {% endif %}
+                        <a href="{{ url('answer_index', {'filters_question_id' : question.id}) }}" title="{{ question.id }}">
+                            {{ question.id }}
+                        </a>
+                        <a href="{{ url('answer_create/{question_id}', {'filters_question_id' : question.id}) }}" title="{{ question.id }}">
+                            {{ question.id }}
+                        </a>
 
 
-                </td>
+
+                    </td>
 
             </tr>
               {% endfor %}

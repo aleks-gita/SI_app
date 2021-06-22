@@ -101,7 +101,7 @@ class CategoryController extends AbstractController
      * Create action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param \App\Service\CategoryService      $categoryService Category Service
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -124,7 +124,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->setAuthor($this->getUser());
+            $category->setAuthor($this->getUser());
             $this->categoryService->save($category);
 
             $this->addFlash('success', 'message_created_successfully');
@@ -142,7 +142,7 @@ class CategoryController extends AbstractController
      *
      * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
      * @param \App\Entity\Category                      $category           Category entity
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param \App\Repository\CategoryService       $categoryService Service repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
