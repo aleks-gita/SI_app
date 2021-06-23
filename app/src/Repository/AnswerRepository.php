@@ -47,7 +47,7 @@ class AnswerRepository extends ServiceEntityRepository
     {
             $queryBuilder = $this->getOrCreateQueryBuilder()
                 ->select(
-                    'partial answer.{id, date, content, title, indication}',
+                    'partial answer.{id, date, content, title, indication, nick}',
                             'partial questions.{id, date, content, title}',
 
                 )

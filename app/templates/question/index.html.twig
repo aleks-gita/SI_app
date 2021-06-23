@@ -73,11 +73,11 @@
                             {{ 'action_delete'|trans }}
                         </a>
                         {% endif %}
-                        <a href="{{ url('answer_index', {'filters_question_id' : question.id}) }}" title="{{ question.id }}">
-                            {{ question.id }}
+                        <a href="{{ url('answer_index', {'filters_question_id' : question.id}) }}" title="{{ 'see_answers'|trans }}" id="view_button">
+                            {{ 'see_answers'|trans }}
                         </a>
-                        <a href="{{ url('answer_create/{question_id}', {'filters_question_id' : question.id}) }}" title="{{ question.id }}">
-                            {{ question.id }}
+                        <a href="{{ url('answer_create', {'filters_question_id' : question.id}) }}" title="{{ 'create_answer'|trans }}" id="view_button">
+                            {{ 'create_answers'|trans }}
                         </a>
 
 

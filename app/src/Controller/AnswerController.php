@@ -126,7 +126,26 @@ class AnswerController extends AbstractController
             ['pagination' => $pagination]
         );
     }
+    public function index_author(Request $request): Response
+    {
 
+        $filters = [];
+        $filters['question_id'] = $request->query->getInt('filters_question_id');
+
+        if ($this->isGranted('ROLE_USER')) {
+
+            $pagination = $this->answerService->createPaginatedList_author(
+                $request->query->getInt('page', 1),
+                $this->getUser(),
+                $filters
+            );
+
+            return $this->render(
+                'answer/index.html.twig',
+                ['pagination' => $pagination]
+            );
+        }
+    }
     /**
      * Show action.
      *
@@ -197,40 +216,48 @@ class AnswerController extends AbstractController
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $answer->setAuthor($this->getUser());
-            $answer->setDate(new \DateTime());
-            $this->answerService->save($answer);
+        if ($this->isGranted('ROLE_USER') == false){
+            if ($form->isSubmitted() && $form->isValid()) {
+                // $answer->setAuthorName($this-> getAuthorName);
+                $answer->setDate(new \DateTime());
+                $this->answerService->save($answer);
+                $this->addFlash('success', 'message_created_successfully');
 
-            return $this->redirectToRoute('answer_index');
+                return $this->redirectToRoute('answer_index');
+
+            }
+
         }
-       /* if ($answer->getAuthor() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
 
-            return $this->redirectToRoute('answer_index');
-        }*/
+        if ($this->isGranted('ROLE_USER')) {
+            if ($form->isSubmitted() && $form->isValid()) {
+               $answer->setAuthor($this->getUser());
+                $answer->setDate(new \DateTime());
+                $this->answerService->save($answer);
+                $this->addFlash('success', 'message_created_successfully');
+
+                return $this->redirectToRoute('answer_index');
+            }
+        }
+
+        if ($this->isGranted('ROLE_USER') == false){
+            if ($form->isSubmitted() && $form->isValid()) {
+               // $answer->setAuthorName($this-> getAuthorName);
+                $answer->setDate(new \DateTime());
+                $this->answerService->save($answer);
+                $this->addFlash('success', 'message_created_successfully');
+
+                return $this->redirectToRoute('answer_index');
+
+            }
+
+        }
         return $this->render(
             'answer/create.html.twig',
             ['form' => $form->createView()]
         );
     }
-    /**
-     * Answer action.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Service\AnswerService        $answerService Answer Service
-     *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @Route(
-     *     "/create_new",
-     *     methods={"GET", "POST"},
-     *     name="answer_create_new",
-     * )
-     */
+
 
     /**
      * Edit action.

@@ -35,7 +35,9 @@ class AnswerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /*$builder->add(
+
+
+        $builder->add(
             'question',
             EntityType::class,
             [
@@ -48,7 +50,17 @@ class AnswerType extends AbstractType
                 'required' => true,
             ]
         );
-*/
+
+        $builder->add(
+            'nick',
+            TextType::class,
+            [
+                'label' => 'label_author',
+                'attr' => ['max_length' => 64],
+                'required' => false,
+            ]
+        );
+
         $builder->add(
             'title',
             TextType::class,
@@ -69,7 +81,7 @@ class AnswerType extends AbstractType
         );
 
 
-        //if ($this->isGranted('ROLE_ADMIN')) {
+       // if (is_granted('ROLE_ADMIN')){
             $builder->add(
                 'indication',
                 CheckboxType::class,
@@ -79,8 +91,8 @@ class AnswerType extends AbstractType
                     'required' => false,
                 ]
             );
-       // }
-    }
+        }
+//    }
 
     /**
      * Configures the options for this type.

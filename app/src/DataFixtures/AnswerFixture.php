@@ -28,6 +28,7 @@ class AnswerFixture extends AbstractBaseFixtures implements DependentFixtureInte
             $answer->setContent($this->faker->sentence);
             $answer->setDate($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $answer->setIndication($this->faker->boolean());
+            //$answer->setAuthorName($this->faker->name);
             $answer->setQuestion($this->getRandomReference('questions'));
             $answer->setAuthor($this->getRandomReference('users'));
 

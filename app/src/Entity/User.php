@@ -10,8 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(
@@ -86,9 +85,8 @@ class User implements UserInterface
      *
      * @var string
      *
-     * @ORM\Column(type="string")
-
-     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=64)
+     *
      * @Assert\Type(type="string")
      * @SecurityAssert\UserPassword
      */
@@ -99,6 +97,18 @@ class User implements UserInterface
      *
      * @return int|null Result
      */
+
+    /**
+     * @ORM\Column(type="string", length=64)
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    private $lastname;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -182,6 +192,30 @@ class User implements UserInterface
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
     }
 
     /**

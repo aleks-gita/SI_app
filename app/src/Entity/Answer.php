@@ -4,10 +4,14 @@ namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnswerRepository::class)
  * @ORM\Table(name="answers")
+ *
+ * @UniqueEntity(fields={"title"})
  */
 class Answer
 {
@@ -25,6 +29,11 @@ class Answer
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Type(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="255",)
      */
     private $content;
 
@@ -42,14 +51,25 @@ class Answer
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Type(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="255",
+     *     )
      */
     private $title;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $author;
+
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $nick;
 
     public function getId(): ?int
     {
@@ -121,6 +141,18 @@ class Answer
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getNick(): ?string
+    {
+        return $this->nick;
+    }
+
+    public function setNick(string $nick): self
+    {
+        $this->nick = $nick;
 
         return $this;
     }

@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'title_answer_create'|trans{'%id%': answer.question.id|default('')} }}
+    {{ 'title_answer_create_anonim'|trans }}
 {% endblock %}
 
 {% block body %}
-    <h1>{{ 'title_answer_create'|trans{'%id%': answer.question.id|default('')} }}</h1>
-    {{ form_start(form, { method: 'PUT', action: url('question_create_new', {id: answer.question.id})}) }}
+    <h1>{{ 'title_answer_create_anonim'|trans }}</h1>
+    {{ form_start(form, { method: 'POST', action: url('answer_create_anonim') } )}}
     {{ form_widget(form) }}
     <div class="form-group row float-sm-right">
         <input type="submit" value="{{ 'action_save'|trans }}" id="view_button" />
     </div>
     <div class="form-group row float-sm-left">
-        <a href="{{ url('question_index') }}" id="view_button">
+        <a href="{{ url('answer_index') }}" id="view_button">
             {{ 'action_back_to_list'|trans }}
         </a>
     </div>

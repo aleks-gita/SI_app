@@ -6,20 +6,17 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\UserService;
 use App\Form\UserType;
+use App\Repository\UserRepository;
+use App\Service\UserService;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
-
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 /**
@@ -164,11 +161,14 @@ class UserController extends AbstractController
 
     public function edit(Request $request, User $user): Response
     {
+        $User = $this->getUser();
+
         $form = $this->createForm(UserType::class, $user, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userService->save($user);
+            $newPassword= $form ->get('newPassword')->getData();
+            $this->userService->save($user, $newPassword);
 
             $this->addFlash('success', 'message_updated_successfully');
 

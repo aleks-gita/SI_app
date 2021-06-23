@@ -38,7 +38,11 @@
                     <td>{{ answer.title }}</td>
                     <td>{{ answer.content }}</td>
                     <td>{{ answer.indication }}</td>
-                    <td>{{ answer.author.email }}</td>
+                    {% if answer.nick is empty %}
+                        <td>{{ answer.author.email }}</td>
+                    {% else %}
+                        <td>{{ answer.nick }}</td>
+                    {% endif %}
                     <td>
 
                         <a href="{{ url('answer_show', {id: answer.id}) }}" title="view" id="view_button">

@@ -4,8 +4,11 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,11 +21,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    /**
+     * Password encoder.
+     *
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+
 
     const PAGINATOR_ITEMS_PER_PAGE = 10;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $this->passwordEncoder = $passwordEncoder;
         parent::__construct($registry, User::class);
     }
 
@@ -65,39 +76,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     }
     /**
-     * Save record.
+     * Save user.
      *
-     * @param \App\Entity\User $user User entity
+     * @param User $user User entity
+     * @param string|null $newPassword
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function save(User $user): void
+    public function save(User $user, string $newPassword = null)
     {
+        if ($newPassword) {
+            $user->setPassword(
+                $this->passwordEncoder->encodePassword(
+                    $user,
+                    $newPassword
+                )
+            );
+        }
+
+
         $this->_em->persist($user);
         $this->_em->flush();
-    }
-    /**
-     * Delete record.
-     *
-     * @param \App\Entity\User $user User entity
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function delete(User $user): void
-    {
-        $this->_em->remove($user);
-        $this->_em->flush();
-    }
-    public function findOneByEmail($email): QueryBuilder
-    {
-       $queryBuilder = $this->queryAll();
-
-        $queryBuilder->andWhere('user.email = :email')
-            ->setParameter('email', $email);
-
-        return $queryBuilder;
     }
 
     // /**

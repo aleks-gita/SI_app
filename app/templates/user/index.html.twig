@@ -17,19 +17,21 @@
             <tr>
                 <th>{{ knp_pagination_sortable(pagination, 'label_id'|trans, 'user.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_email'|trans, 'user.emial') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label_firstname'|trans, 'user.firstname') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label_lastname'|trans, 'user.lastname') }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
 
 
-                <a href="{{ url('user_create') }}" title="view" id="view_button">
-                    {{ 'user_create'|trans }}
-                </a>
+
 
             {% for user in pagination.items %}
                 <tr>
                     <td>{{ user.id }}</td>
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.lastname }}</td>
                     <td>{{ user.email }}</td>
 
                     <td>
