@@ -46,7 +46,6 @@ class Answer
      * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="answers")
      *
      *
-     *
      */
     private $questions;
 

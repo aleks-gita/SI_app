@@ -118,6 +118,10 @@
                 <source>action_view</source>
                 <target>Zobacz</target>
            </trans-unit>
+            <trans-unit id="see_question">
+                    <source>see_question</source>
+                    <target>Zobacz pytanie</target>
+               </trans-unit>
            <trans-unit id="action_edit">
                     <source>action_edit</source>
                     <target>Edytuj</target>
@@ -326,6 +330,35 @@
                         <source>question_delete</source>
                         <target>Czy na pewo chcesz to usunąć?</target>
                      </trans-unit>
+                     <trans-unit id="label_password">
+                        <source>label_password</source>
+                        <target>Haslo</target>
+                      </trans-unit>
+                       <trans-unit id="label_password_repeat">
+                            <source>label_password_repeat</source>
+                            <target>Powtórz haslo</target>
+                          </trans-unit>
+                      <trans-unit id="message.empty_list">
+                         <source>message.empty_list</source>
+                         <target>Lista jest pusta</target>
+                    </trans-unit>
+                    <trans-unit id="message_item_not_found">
+                         <source>message_item_not_found</source>
+                         <target>Nie znaleziono</target>
+                    </trans-unit>
+                     <trans-unit id="message_form_error">
+                        <source>message_form_error</source>
+                        <target>Błąd formularza</target>
+                     </trans-unit>
+                      <trans-unit id="message_deleted_successfully ">
+                         <source>message_deleted_successfully </source>
+                         <target>Usunięto</target>
+                       </trans-unit>
+                        <trans-unit id="message_created_successfully  ">
+                             <source>message_created_successfully  </source>
+                             <target>Utworzono</target>
+                           </trans-unit>
+
         </body>
     </file>
 </xliff>

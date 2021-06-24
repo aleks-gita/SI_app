@@ -229,6 +229,131 @@
                          <source>title_tag_details</source>
                            <target>Tag details</target>
                        </trans-unit>
+                    <trans-unit id="back_to_list">
+                   <source>back_to_list</source>
+                     <target>Back to list</target>
+                 </trans-unit>
+                <trans-unit id="title_answer_edit">
+                    <source>title_answer_edit</source>
+                    <target>Edit answer</target>
+                 </trans-unit>
+                <trans-unit id="answer_add">
+                       <source>answer_add</source>
+                       <target>Add answer</target>
+                    </trans-unit>
+                 <trans-unit id="action_indication">
+                       <source>action_indication</source>
+                       <target>Indicate answer</target>
+                 </trans-unit>
+                   <trans-unit id="action_delete_question">
+                          <source>action_delete_question</source>
+                          <target>Delete question</target>
+                    </trans-unit>
+                   <trans-unit id="title_answer_indication">
+                          <source>title_answer_indication</source>
+                          <target>Indicate answer</target>
+                    </trans-unit>
+                    <trans-unit id="my_data">
+                          <source>my_data</source>
+                          <target>My data</target>
+                    </trans-unit>
+                    <trans-unit id="button_user_edit">
+                         <source>button_user_edit</source>
+                         <target>Edit user data</target>
+                    </trans-unit>
+                     <trans-unit id="title_category_delete">
+                             <source>title_category_delete</source>
+                             <target>Remowe category</target>
+                        </trans-unit>
+                        <trans-unit id="see_answers">
+                               <source>see_answers</source>
+                              <target>See the answer</target>
+                         </trans-unit>
+                        <trans-unit id="create_answer">
+                              <source>create_answer</source>
+                             <target>Add answer</target>
+                        </trans-unit>
+                    <trans-unit id="create_answers">
+                              <source>create_answers</source>
+                             <target>Add answer</target>
+                        </trans-unit>
+                    <trans-unit id="add_answer">
+                            <source>add_answer</source>
+                           <target>Add answer</target>
+                      </trans-unit>
+                        <trans-unit id="add_answers">
+                             <source>add_answers</source>
+                            <target>Add answer</target>
+                       </trans-unit>
+                         <trans-unit id="label_view">
+                                <source>label_view</source>
+                               <target>See</target>
+                          </trans-unit>
+                      <trans-unit id="label_back_to_the_list">
+                             <source>label_back_to_the_list</source>
+                              <target>Back to list</target>
+                      </trans-unit>
+                        <trans-unit id="account_create">
+                             <source>account_create</source>
+                             <target>Make account</target>
+                      </trans-unit>
+                     <trans-unit id="title_user_delete">
+                               <source>title_user_delete</source>
+                               <target>Remove user</target>
+                        </trans-unit>
+                        <trans-unit id="title_user_edit">
+                              <source>title_user_edit</source>
+                              <target>Edit user data</target>
+                           </trans-unit>
+                         <trans-unit id="label_firstname">
+                                <source>label_firstname</source>
+                                <target>Firstname</target>
+                             </trans-unit>
+                        <trans-unit id="label_lastname">
+                             <source>label_lastname</source>
+                             <target>Lastname</target>
+                        </trans-unit>
+                        <trans-unit id="title_user_details">
+                             <source>title_user_details</source>
+                             <target>User data</target>
+                        </trans-unit>
+                         <trans-unit id="question_delete">
+                            <source>question_delete</source>
+                            <target>Are you sure?</target>
+                         </trans-unit>
+                         <trans-unit id="label_password">
+                            <source>label_password</source>
+                            <target>Password</target>
+                          </trans-unit>
+                           <trans-unit id="label_password_repeat">
+                                <source>label_password_repeat</source>
+                                <target>Password repeat</target>
+                              </trans-unit>
+                           <trans-unit id="message.empty_list">
+                             <source>message.empty_list</source>
+                             <target>Empty list</target>
+                        </trans-unit>
+                        <trans-unit id="message_item_not_found">
+                             <source>message_item_not_found</source>
+                             <target>Not found</target>
+                        </trans-unit>
+                         <trans-unit id="message_form_error">
+                            <source>message_form_error</source>
+                            <target>Form error</target>
+                         </trans-unit>
+                         <trans-unit id="message_deleted_successfully">
+                                <source>message_deleted_successfully</source>
+                              <target>Usunięto</target>
+                             </trans-unit>
+                            <trans-unit id="message_deleted_successfully ">
+                             <source>message_deleted_successfully </source>
+                             <target>Deleted</target>
+                           </trans-unit>
+                           <trans-unit id="message_created_successfully  ">
+                                                        <source>message_created_successfully  </source>
+                                                        <target>Created</target>
+                                                      </trans-unit>
+
         </body>
     </file>
 </xliff>

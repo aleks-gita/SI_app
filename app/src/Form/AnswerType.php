@@ -45,7 +45,7 @@ class AnswerType extends AbstractType
             [
                 'class' => Question::class,
                 'choice_label' => function ($question) {
-                    return $question->getTitle();
+                    return $question->getContent();
                 },
                 'label' => 'label_question',
                 'placeholder' => 'label_none',

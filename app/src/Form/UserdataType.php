@@ -35,7 +35,7 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
     'firstname',
     TextType::class,
     [
-    'label' => 'label_new_firstname',
+    'label' => 'label_firstname',
     'required' => true,
     'attr' => ['max_length' => 64],
     ]
@@ -44,7 +44,7 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
     'lastname',
     TextType::class,
     [
-    'label' => 'label_new_lastname',
+    'label' => 'label_lastname',
     'required' => true,
     'attr' => ['max_length' => 255],
     ]
@@ -53,7 +53,7 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
     'email',
     EmailType::class,
     [
-    'label' => 'label_new_email',
+    'label' => 'label_email',
     'required' => true,
     'attr' => ['max_length' => 255],
     ]
@@ -65,8 +65,8 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
     'mapped' => false,
     'required' => false,
     'type' => PasswordType::class,
-    'first_options' => array('label'=>'label_new_password'),
-    'second_options' => array('label'=>'label_new_password_repeat'),
+    'first_options' => array('label'=>'label_password'),
+    'second_options' => array('label'=>'label_password_repeat'),
     ]
     );
 }

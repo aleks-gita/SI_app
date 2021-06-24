@@ -245,7 +245,8 @@ class AnswerController extends AbstractController
 
         if ($this->isGranted('ROLE_USER') == false) {
             if ($form->isSubmitted() && $form->isValid()) {
-                // $answer->setAuthorName($this-> getAuthorName);
+                //$answer->setAuthor($this->getAuthor);
+                $answer->setQuestion($this->getAuthor);
                 $answer->setDate(new \DateTime());
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
