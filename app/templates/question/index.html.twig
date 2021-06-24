@@ -64,21 +64,28 @@
                         </a>
 
                         {% if is_granted('ROLE_USER') and is_granted('ROLE_ADMIN')  == false %}
-                        <a href="{{ url('question_edit', {id: question.id}) }}" title="view" id="view_button">
-                            {{ 'action_edit'|trans }}
-                        </a>
+                            <a href="{{ url('question_edit', {id: question.id}) }}" title="view" id="view_button">
+                                {{ 'action_edit'|trans }}
+                            </a>
                         {% endif %}
                         {% if is_granted('ROLE_USER') %}
-                        <a href="{{ url('question_delete', {id: question.id}) }}" title="view" id="view_button">
-                            {{ 'action_delete'|trans }}
-                        </a>
+
+                            <a href="{{ url('question_delete', {id: question.id}) }}" title="view" id="view_button">
+                                {{ 'action_delete'|trans }}
+                            </a>
                         {% endif %}
-                        <a href="{{ url('answer_index', {'filters_question_id' : question.id}) }}" title="{{ 'see_answers'|trans }}" id="view_button">
-                            {{ 'see_answers'|trans }}
-                        </a>
-                        <a href="{{ url('answer_create', {'filters_question_id' : question.id}) }}" title="{{ 'create_answer'|trans }}" id="view_button">
-                            {{ 'create_answers'|trans }}
-                        </a>
+                            <a href="{{ url('answer_index', {'filters_question_id' : question.id}) }}" title="{{ 'see_answers'|trans }}" id="view_button">
+                                {{ 'see_answers'|trans }}
+                            </a>
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ url('answer_create', {'filters_question_id' : question.id}) }}" title="{{ 'create_answer'|trans }}" id="view_button">
+                                {{ 'create_answers'|trans }}
+                            </a>
+                        {% else %}
+                            <a href="{{ url('answer_add', {'filters_question_id' : question.id}) }}" title="{{ 'add_answer'|trans }}" id="view_button">
+                                {{ 'add_answers'|trans }}
+                            </a>
+                        {% endif%}
 
 
 

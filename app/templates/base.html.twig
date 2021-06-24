@@ -12,6 +12,13 @@
 <div class="login">
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <div>{{ app.user.email }}</div>
+        {% if is_granted('ROLE_USER')%}
+            <div>
+                <a href="{{ url('user_show', {id: app.user.id}) }}" title="show user">{{ 'my_data'|trans }}</a>
+
+                <a href="{{ url('user_edit', {id: app.user.id}) }}">{{ 'button_user_edit'|trans }}</a>
+            </div>
+        {% endif %}
         <div>
             <a href="{{ path('app_logout') }}">{{ 'action_logout'|trans }}</a>
         </div>
@@ -25,6 +32,7 @@
         <a href="{{ url('user_registration') }}">{{ 'make_account'|trans }}</a>
     </div>
     {% endif %}
+
 </div>
 <div class="menu">
 <nav id="menu">
@@ -38,9 +46,11 @@
         <li><a href="{{ url('category_index') }}" title="view">
                 {{ 'menu_category'|trans }}
             </a></li>
+        {% if is_granted('ROLE_ADMIN') %}
         <li><a href="{{ url('tag_index')}}" title="view">
             {{ 'menu_tag'|trans }}
         </a></li>
+        {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
         <li><a href="{{ url('user_index')}}" title="view">
                 {{ 'menu_user'|trans }}

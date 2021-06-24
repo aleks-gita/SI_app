@@ -18,6 +18,10 @@
                         <source>title_tag_list</source>
                        <target>Tag list</target>
                    </trans-unit>
+                <trans-unit id="app_title">
+                      <source>app_title</source>
+                     <target>App Q and A</target>
+                 </trans-unit>
                  <trans-unit id="title_user_list">
                         <source>title_user_list</source>
                          <target>Users list</target>

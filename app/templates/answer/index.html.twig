@@ -26,10 +26,16 @@
             </tr>
             </thead>
             <tbody>
-
-            <a href="{{ url('answer_create') }}" title="view" id="view_button">
-                {{ 'answer_create'|trans }}
-            </a>
+            {% if is_granted('ROLE_USER') %}
+                <a href="{{ url('answer_create') }}" title="view" id="view_button">
+                    {{ 'answer_create'|trans }}
+                </a>
+            {% endif %}
+            {% if is_granted('ROLE_USER') == false %}
+                <a href="{{ url('answer_add') }}" title="view" id="view_button">
+                    {{ 'answer_add'|trans }}
+                </a>
+            {% endif %}
 
             {% for answer in pagination.items %}
                 <tr>
@@ -58,6 +64,18 @@
                         <a href="{{ url('answer_delete', {id: answer.id}) }}" title="view" id="view_button">
                             {{ 'action_delete'|trans }}
                         </a>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ url('answer_indication', {id: answer.id}) }}" title="view" id="view_button">
+                                {{ 'action_indication'|trans }}
+                            </a>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            {% if not answer.question|length %}
+                                <a href="{{ url('question_delete', {id: answer.question.id}) }}" title="view" id="view_button">
+                                    {{ 'action_delete_question'|trans }}
+                                </a>
+                            {% endif %}
                         {% endif %}
 
                         <a href="{{ url('answer_index', {'filters_question_id' : answer.question.id}) }}" title="{{ answer.question.id }}">

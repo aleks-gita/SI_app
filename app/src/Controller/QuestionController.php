@@ -244,8 +244,6 @@ class QuestionController extends AbstractController
     public function delete(Request $request, Question $question): Response
     {
 
-
-
             $form = $this->createForm(FormType::class, $question, ['method' => 'DELETE']);
             $form->handleRequest($request);
 

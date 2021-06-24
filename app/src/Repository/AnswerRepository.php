@@ -52,7 +52,7 @@ class AnswerRepository extends ServiceEntityRepository
 
                 )
                      ->join('answer.questions', 'questions')
-                    -> orderBy('answer.date',  'DESC');
+                    -> orderBy('answer.indication',  'DESC');
         $queryBuilder = $this->applyFiltersToList($queryBuilder, $filters);
 
         return $queryBuilder;

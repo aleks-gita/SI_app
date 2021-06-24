@@ -75,7 +75,7 @@ class Category
      * )
      *  @Assert\Type(type="string")
      *  @Assert\Length(
-     *     min="3",
+     *     min="1",
      *     max="64",
      *  )
      *

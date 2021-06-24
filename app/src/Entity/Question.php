@@ -64,7 +64,7 @@ class Question
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question")
+     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="questions", cascade={"remove"})
      * @ORM\JoinTable(name="answers_questions")
      *
      *

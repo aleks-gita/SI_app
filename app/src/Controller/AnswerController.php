@@ -10,7 +10,8 @@ use App\Entity\Question;
 
 use App\Service\AnswerService;
 use App\Form\AnswerType;
-
+use App\Form\AnswerIndicationType;
+use App\Form\AnswerAnonimType;
 use App\Service\QuestionService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -126,6 +127,7 @@ class AnswerController extends AbstractController
             ['pagination' => $pagination]
         );
     }
+
     public function index_author(Request $request): Response
     {
 
@@ -146,6 +148,7 @@ class AnswerController extends AbstractController
             );
         }
     }
+
     /**
      * Show action.
      *
@@ -164,7 +167,7 @@ class AnswerController extends AbstractController
     public function show(Answer $answer): Response
     {
 
-        if ($this->isGranted('ROLE_ADMIN')){
+        if ($this->isGranted('ROLE_ADMIN')) {
             return $this->render(
                 'answer/show.html.twig',
                 ['answer' => $answer]
@@ -178,13 +181,13 @@ class AnswerController extends AbstractController
                 return $this->redirectToRoute('answer_index');
             }
 
-                return $this->render(
-                    'answer/show.html.twig',
-                    ['answer' => $answer]
-                );
+            return $this->render(
+                'answer/show.html.twig',
+                ['answer' => $answer]
+            );
 
         }
-        if ($this->isGranted('ROLE_USER') == false){
+        if ($this->isGranted('ROLE_USER') == false) {
             return $this->render(
                 'answer/show.html.twig',
                 ['answer' => $answer]
@@ -196,8 +199,8 @@ class AnswerController extends AbstractController
     /**
      * Answer action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Service\AnswerService        $answerService Answer Service
+     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
+     * @param \App\Service\AnswerService $answerService Answer Service
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -216,7 +219,7 @@ class AnswerController extends AbstractController
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_USER') == false){
+        if ($this->isGranted('ROLE_USER') == false) {
             if ($form->isSubmitted() && $form->isValid()) {
                 // $answer->setAuthorName($this-> getAuthorName);
                 $answer->setDate(new \DateTime());
@@ -231,7 +234,7 @@ class AnswerController extends AbstractController
 
         if ($this->isGranted('ROLE_USER')) {
             if ($form->isSubmitted() && $form->isValid()) {
-               $answer->setAuthor($this->getUser());
+                $answer->setAuthor($this->getUser());
                 $answer->setDate(new \DateTime());
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
@@ -240,9 +243,9 @@ class AnswerController extends AbstractController
             }
         }
 
-        if ($this->isGranted('ROLE_USER') == false){
+        if ($this->isGranted('ROLE_USER') == false) {
             if ($form->isSubmitted() && $form->isValid()) {
-               // $answer->setAuthorName($this-> getAuthorName);
+                // $answer->setAuthorName($this-> getAuthorName);
                 $answer->setDate(new \DateTime());
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
@@ -258,7 +261,46 @@ class AnswerController extends AbstractController
         );
     }
 
+    /**
+     * Answer action.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
+     * @param \App\Service\AnswerService $answerService Answer Service
+     *
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @Route(
+     *     "/add",
+     *     methods={"GET", "POST"},
+     *     name="answer_add",
+     * )
+     */
+    public function add(Request $request): Response
+    {
+        $answer = new Answer();
+        $form = $this->createForm(AnswerAnonimType::class, $answer);
+        $form->handleRequest($request);
 
+        if ($this->isGranted('ROLE_USER') == false) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                // $answer->setAuthorName($this-> getAuthorName);
+                $answer->setDate(new \DateTime());
+                $this->answerService->save($answer);
+                $this->addFlash('success', 'message_created_successfully');
+
+                return $this->redirectToRoute('answer_index');
+
+            }
+
+        }
+        return $this->render(
+            'answer/add.html.twig',
+            ['form' => $form->createView()]
+        );
+    }
     /**
      * Edit action.
      *
@@ -307,6 +349,51 @@ class AnswerController extends AbstractController
         );
     }
 
+
+    /**
+     * Indication action.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
+     * @param \App\Entity\Answer                          $answer      answer entity
+     * @param \App\Repository\AnswerRepository            $answerRepository answer repository
+     *
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @Route(
+     *     "/{id}/indication",
+     *     methods={"GET", "PUT"},
+     *     requirements={"id": "[1-9]\d*"},
+     *     name="answer_indication",
+     * )
+     * @IsGranted("ROLE_ADMIN")
+     *
+     * )
+     */
+    public function indication(Request $request, Answer $answer): Response
+    {
+        $form = $this->createForm(AnswerIndicationType::class, $answer, ['method' => 'PUT']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->answerService->save($answer);
+            $this->addFlash('success', 'message_updated_successfully');
+
+            return $this->redirectToRoute('answer_index');
+        }
+
+        return $this->render(
+            'answer/indication.html.twig',
+            [
+                'form' => $form->createView(),
+                'answer' => $answer,
+            ]
+        );
+    }
+
+
     /**
      * Delete action.
     @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
@@ -329,7 +416,6 @@ class AnswerController extends AbstractController
      */
     public function delete(Request $request, Answer $answer): Response
     {
-
 
         $form = $this->createForm(FormType::class, $answer, ['method' => 'DELETE']);
         $form->handleRequest($request);

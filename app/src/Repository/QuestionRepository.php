@@ -62,8 +62,9 @@ class QuestionRepository extends ServiceEntityRepository
      */
     public function delete(Question $question): void
     {
-        $this->_em->remove($question);
-        $this->_em->flush();
+            $this->_em->remove($question);
+            $this->_em->flush();
+
     }
     /**
      * Query all records.
