@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Question repository.
+ */
 namespace App\Repository;
 
 use App\Entity\Question;
@@ -32,7 +34,10 @@ class QuestionRepository extends ServiceEntityRepository
      */
     const PAGINATOR_ITEMS_PER_PAGE = 10;
 
-
+    /**
+     * NoteRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Question::class);
@@ -90,6 +95,13 @@ class QuestionRepository extends ServiceEntityRepository
 
         return $queryBuilder;
     }
+    /**
+     * Get or create new query builder.
+     *
+     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
     private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null ): QueryBuilder
     {
         return $queryBuilder ?? $this->createQueryBuilder('question');

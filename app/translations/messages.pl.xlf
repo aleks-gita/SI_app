@@ -354,10 +354,22 @@
                          <source>message_deleted_successfully </source>
                          <target>Usunięto</target>
                        </trans-unit>
-                        <trans-unit id="message_created_successfully  ">
-                             <source>message_created_successfully  </source>
+                        <trans-unit id="message_created_successfully">
+                             <source>message_created_successfully</source>
                              <target>Utworzono</target>
                            </trans-unit>
+                        <trans-unit id="message_updated_successfully">
+                                   <source>message_updated_successfully</source>
+                                   <target>Zedytowano</target>
+                                 </trans-unit>
+                         <trans-unit id="label_question_title">
+                                     <source>label_question_title</source>
+                                     <target>Tytuł pytania</target>
+                               </trans-unit>
+                                <trans-unit id="label_content_question">
+                                        <source>label_content_question</source>
+                                        <target>Treść pytania</target>
+                                  </trans-unit>
 
         </body>
     </file>

@@ -341,18 +341,26 @@
                             <source>message_form_error</source>
                             <target>Form error</target>
                          </trans-unit>
-                         <trans-unit id="message_deleted_successfully">
-                                <source>message_deleted_successfully</source>
-                              <target>Usunięto</target>
-                             </trans-unit>
-                            <trans-unit id="message_deleted_successfully ">
-                             <source>message_deleted_successfully </source>
+                        <trans-unit id="message_deleted_successfully">
+                             <source>message_deleted_successfully</source>
                              <target>Deleted</target>
                            </trans-unit>
-                           <trans-unit id="message_created_successfully  ">
-                                                        <source>message_created_successfully  </source>
-                                                        <target>Created</target>
-                                                      </trans-unit>
+                           <trans-unit id="message_created_successfully">
+                             <source>message_created_successfully</source>
+                             <target>Created</target>
+                           </trans-unit>
+                           <trans-unit id="see_question">
+                             <source>see_question</source>
+                                <target>See question</target>
+                           </trans-unit>
+                           <trans-unit id="label_question_title">
+                                 <source>label_question_title</source>
+                                 <target>Question Title</target>
+                           </trans-unit>
+                            <trans-unit id="label_content_question">
+                                    <source>label_content_question</source>
+                                    <target>Question content</target>
+                              </trans-unit>
 
         </body>
     </file>

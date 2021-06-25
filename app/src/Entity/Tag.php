@@ -1,4 +1,7 @@
 <?php
+/**
+ * Tag entity.
+ */
 
 namespace App\Entity;
 
@@ -48,41 +51,64 @@ class Tag
      */
     private $questions;
 
+    /**
+     * Tag constructor.
+     */
     public function __construct()
     {
         $this->questions = new ArrayCollection();
     }
-
+    /**
+     * Getter for Id.
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
-
+    /**
+     * Getter for Title.
+     *
+     * @return string|null
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
-
-    public function setTitle(string $title): self
+    /**
+     * Setter for Title.
+     *
+     * @param string $title
+     * @return void
+     */
+    public function setTitle(string $title): void
     {
         $this->title = $title;
-
-        return $this;
     }
-
+    /**
+     * Getter for Data
+     * .
+     * @return DateTimeInterface|null
+     *
+     */
     public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
-
-    public function setDate(DateTimeInterface $date): self
+    /**
+     * Setter for Data.
+     *
+     * @param DateTimeInterface $date
+     * @return void
+     */
+    public function setDate(DateTimeInterface $date): void
     {
         $this->date = $date;
-
-        return $this;
     }
 
     /**
+     * Getter for Notes.
      * @return Collection|Question[]
      */
     public function getQuestions(): Collection
@@ -90,22 +116,30 @@ class Tag
         return $this->questions;
     }
 
-    public function addQuestion(Question $question): self
+    /**
+     * Add Question
+     *
+     * @param Question $question
+     * @return void
+     */
+    public function addQuestion(Question $question): void
     {
         if (!$this->questions->contains($question)) {
             $this->questions[] = $question;
             $question->addTag($this);
         }
-
-        return $this;
     }
-
-    public function removeQuestion(Question $question): self
+    /**
+     * Remove Question.
+     *
+     * @param Question $question
+     * @return void
+     */
+    public function removeQuestion(Question $question): void
     {
         if ($this->questions->removeElement($question)) {
             $question->removeTag($this);
         }
 
-        return $this;
     }
 }

@@ -19,6 +19,7 @@
             <thead>
             <tr>
                 <th>{{ knp_pagination_sortable(pagination, 'label_id'|trans, 'question.id') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label_title'|trans, 'question.title' ) }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_question'|trans, 'question.content' ) }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_date'|trans, 'question.date') }}</th>
                 <th>{{ 'label_category'|trans }}</th>
@@ -39,6 +40,7 @@
             {% for question in pagination.items %}
                 <tr>
                     <td>{{ question.id }}</td>
+                    <td>{{ question.title }}</td>
                     <td>{{ question.content }}</td>
                     <td>{{ question.date|format_date('long')}}</td>
                     <td> <a href="{{ url('question_index', {'filters_category_id' : question.category.id}) }}" title="{{ question.category.name }}">

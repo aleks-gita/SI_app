@@ -226,7 +226,7 @@ class AnswerController extends AbstractController
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
 
-                return $this->redirectToRoute('answer_index');
+                return $this->redirectToRoute('question_index');
 
             }
 
@@ -239,7 +239,7 @@ class AnswerController extends AbstractController
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
 
-                return $this->redirectToRoute('answer_index');
+                return $this->redirectToRoute('question_index');
             }
         }
 
@@ -251,7 +251,7 @@ class AnswerController extends AbstractController
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
 
-                return $this->redirectToRoute('answer_index');
+                return $this->redirectToRoute('question_index');
 
             }
 
@@ -292,7 +292,7 @@ class AnswerController extends AbstractController
                 $this->answerService->save($answer);
                 $this->addFlash('success', 'message_created_successfully');
 
-                return $this->redirectToRoute('answer_index');
+                return $this->redirectToRoute('question_index');
 
             }
 
@@ -429,7 +429,7 @@ class AnswerController extends AbstractController
             $this->answerService->delete($answer);
             $this->addFlash('success', 'message_deleted_successfully');
 
-            return $this->redirectToRoute('answer_index');
+            return $this->redirectToRoute('question_index');
         }
         if ($this->isGranted('ROLE_ADMIN')){
             return $this->render(
@@ -444,7 +444,7 @@ class AnswerController extends AbstractController
             if ($answer->getAuthor() !== $this->getUser()) {
                 $this->addFlash('warning', 'message.item_not_found');
 
-                return $this->redirectToRoute('answer_index');
+                return $this->redirectToRoute('question_index');
             }
 
             return $this->render(

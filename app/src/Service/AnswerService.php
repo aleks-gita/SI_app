@@ -68,7 +68,6 @@ class AnswerService
      * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
      * @param array                                               $filters Filters array
      *
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
      */
     public function createPaginatedList_author(int $page, UserInterface $user, array $filters = []): PaginationInterface
     {
@@ -80,6 +79,17 @@ class AnswerService
             AnswerRepository::PAGINATOR_ITEMS_PER_PAGE
         );
     }
+    /**
+     * Create paginated list.
+     *
+     * @param int $page Page number
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
+     * @param array                                               $filters Filters array
+     *
+     */
+
     public function createPaginatedList_not_author(int $page, array $filters = []): PaginationInterface
     {
         $filters = $this->prepareFilters($filters);
@@ -122,7 +132,6 @@ class AnswerService
      *
      * @return array Result array of filters
      */
-
     private function prepareFilters(array $filters): array
     {
         $resultFilters = [];

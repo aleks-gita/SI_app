@@ -1,8 +1,12 @@
 <?php
 
+/**
+ * Question entity.
+ */
 namespace App\Entity;
 
 use App\Repository\QuestionRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -101,68 +105,99 @@ class Question
      */
     private $author;
 
+    /**
+     * Question constructor.
+     */
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->tags = new ArrayCollection();
     }
 
+    /**
+     * Getter for Id.
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
-
+    /**
+     * Getter for Date.
+     *
+     * @return DateTimeInterface|null
+     */
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
-
+    /**
+     * Setter for Deadline.
+     *
+     * @param DateTimeInterface $date
+     * @return void
+     */
     public function setDate(\DateTimeInterface $date): void
     {
         $this->date = $date;
     }
-
+    /**
+     * Getter for Content.
+     *
+     * @return string|null
+     */
     public function getContent(): ?string
     {
         return $this->content;
     }
-
+    /**
+     * Setter for Content.
+     *
+     * @param string $content
+     * @return void
+     */
     public function setContent(string $content): void
     {
         $this->content = $content;
     }
-
+    /**
+     * Getter for Category.
+     *
+     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?Category $category): self
+    /**
+     * Setter for Category.
+     *
+     * @param Category|null $category
+     * @return void
+     */
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
-
-        return $this;
     }
 
     /**
-     * @return Collection|Answer[]
-
-    public function getAnswers(): Collection
-    {
-        return $this->answers;
-    }*/
-
-    public function addAnswer(Answer $answer): self
+     * Add Answer.
+     * @param Answer $answer
+     */
+    public function addAnswer(Answer $answer): void
     {
         if (!$this->answers->contains($answer)) {
             $this->answers[] = $answer;
             $answer->setQuestion($this);
         }
 
-        return $this;
     }
-
-    public function removeAnswer(Answer $answer): self
+    /**
+     * Remove Answer
+     * @param Answer $answer
+     */
+    public function removeAnswer(Answer $answer): void
     {
         if ($this->answers->removeElement($answer)) {
             // set the owning side to null (unless already changed)
@@ -170,57 +205,76 @@ class Question
                 $answer->setQuestion(null);
             }
         }
-
-        return $this;
     }
-
-
+    /**
+     * Getter for Title.
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
-
-    public function setTitle(string $title): self
+    /**
+     * Setter for Title.
+     *
+     * @param string $title
+     * @return void
+     */
+    public function setTitle(string $title): void
     {
         $this->title = $title;
 
-        return $this;
+
     }
 
     /**
+     * Getter for Tags.
+     *
      * @return Collection|Tag[]
      */
     public function getTags(): Collection
     {
         return $this->tags;
     }
-
-    public function addTag(Tag $tag): self
+    /**
+     * Add Tag.
+     *
+     * @param Tag $tag
+     * @return void
+     */
+    public function addTag(Tag $tag): void
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
         }
 
-        return $this;
     }
-
-    public function removeTag(Tag $tag): self
+    /**
+     * Remove Tag.
+     *
+     * @param Tag $tag
+     */
+    public function removeTag(Tag $tag): void
     {
         $this->tags->removeElement($tag);
-
-        return $this;
     }
-
+    /**
+     * Getter for Author.
+     *
+     * @return User|null
+     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
-
-    public function setAuthor(?User $author): self
+    /**
+     * Setter for Author.
+     *
+     * @param User|null $author
+     */
+    public function setAuthor(?User $author): void
     {
         $this->author = $author;
 
-        return $this;
     }
 
 }

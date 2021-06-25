@@ -119,12 +119,19 @@ class Category
     {
         $this->name = $name;
     }
-
+    /**
+     * Getter for Question.
+     *
+     * @return Collection|Question[]
+     */
     public function getQuestions(): Collection
     {
         return $this->questions;
-    }
-
+    }/**
+     * Add Question.
+     * @param Question $question
+     * @return void
+     */
     public function addQuestion(Question $question): void
     {
         if(!$this->questions->contains($this)) {
@@ -132,7 +139,12 @@ class Category
             $question->setCategory($this);
         }
     }
-
+    /**
+     * Remove question.
+     *
+     * @param Question $question
+     * @return void
+     */
     public function removeQuestion(Question $question): void
     {
         if($this->questions->contains($question)) {
@@ -140,31 +152,46 @@ class Category
             if($question->getCategory() == $this){
                 $question->setCategory(null);
             }
-
         }
     }
-
+    /**
+     * Getter for Code.
+     *
+     * @return string|null Code
+     */
     public function getCode(): ?string
     {
         return $this->code;
     }
-
-    public function setCode(string $code): self
+    /**
+     * Setter for Code.
+     *
+     * @param string $code code
+     */
+    public function setCode(string $code): void
     {
         $this->code = $code;
 
-        return $this;
+
     }
 
+    /**
+     * Getter for Author.
+     *
+     * @return User|null
+     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
-
-    public function setAuthor(?User $author): self
+    /**
+     * Setter for Author.
+     *
+     * @param User|null $author
+     */
+    public function setAuthor(?User $author): void
     {
         $this->author = $author;
 
-        return $this;
     }
 }

@@ -78,9 +78,10 @@
                             {% endif %}
                         {% endif %}
 
-                        <a href="{{ url('answer_index', {'filters_question_id' : answer.question.id}) }}" title="{{ answer.question.id }}" id="view_button">
-                            {{ 'see_question'|trans }}
+                       {#  <a href="{{ url('answer_index', {'filters_question_id' : answer.question.id}) }}" title="{{ answer.question.id }}" id="view_button">
+                            {{ answer.question.id }}
                         </a>
+                        #}
 
                     </td>
 

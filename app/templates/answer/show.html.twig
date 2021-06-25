@@ -12,6 +12,10 @@
             <dd>{{ answer.id }}</dd>
             <dt>{{ 'label_date'|trans }}</dt>
             <dd>{{ answer.date|format_date('long') }}</dd>
+            <dt>{{ 'label_question_title'|trans }}</dt>
+            <dd>{{  answer.question.title }}</dd>
+            <dt>{{ 'label_content_question'|trans }}</dt>
+            <dd>{{ answer.question.content }}</dd>
             <dt>{{ 'label_title'|trans }}</dt>
             <dd>{{  answer.title }}</dd>
             <dt>{{ 'label_content'|trans }}</dt>

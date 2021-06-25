@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Answer repository.
+ */
 namespace App\Repository;
 
 use App\Entity\Answer;
@@ -41,6 +43,7 @@ class AnswerRepository extends ServiceEntityRepository
     /**
      * Query all records.
      *
+     * @param array $filters
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
     public function queryAll(array $filters = []): QueryBuilder
@@ -73,7 +76,7 @@ class AnswerRepository extends ServiceEntityRepository
     /**
      * Save record.
      *
-     * @param \App\Entity\Answer $answer Category entity
+     * @param Answer $answer Category entity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -83,7 +86,14 @@ class AnswerRepository extends ServiceEntityRepository
         $this->_em->persist($answer);
         $this->_em->flush();
     }
-
+    /**
+     * Delete record.
+     *
+     * @param \App\Entity\Answer $answer Answer entity
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function delete(Answer $answer): void
     {
         $this->_em->remove($answer);
@@ -106,6 +116,14 @@ class AnswerRepository extends ServiceEntityRepository
 
         return $queryBuilder;
     }
+    /**
+     * Apply filters to paginated list.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder Query builder
+     * @param array                      $filters      Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
     private function applyFiltersToList(QueryBuilder $queryBuilder, array $filters = []): QueryBuilder
     {
         if (isset($filters['question']) && $filters['question'] instanceof Question) {

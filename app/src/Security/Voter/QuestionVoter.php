@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Question security voter.
+ */
 namespace App\Security\Voter;
 
 use App\Entity\Question;
@@ -8,6 +10,9 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class QuestionVoter.
+ */
 class QuestionVoter extends Voter
 {
     /**

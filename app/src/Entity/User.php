@@ -106,7 +106,11 @@ class User implements UserInterface
      */
     private $lastname;
 
-
+    /**
+     * Getter for the Id.
+     *
+     * @return int|null Result
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -191,29 +195,41 @@ class User implements UserInterface
     {
         $this->password = $password;
     }
-
+    /**
+     * Getter for Firstname.
+     * @return  string|null
+     */
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
-
-    public function setFirstname(string $firstname): self
+    /**
+     * Setter for Firstname.
+     * @param $firstname
+     * @return $this
+     */
+    public function setFirstname(string $firstname): void
     {
         $this->firstname = $firstname;
 
-        return $this;
     }
-
+    /**
+     * Getter for Lastname.
+     * @return string|null
+     */
     public function getLastname(): ?string
     {
         return $this->lastname;
     }
-
-    public function setLastname(string $lastname): self
+    /**
+     * Setter for Lastname.
+     * @param $lastname
+     * @return $this
+     */
+    public function setLastname(string $lastname): void
     {
         $this->lastname = $lastname;
 
-        return $this;
     }
 
     /**

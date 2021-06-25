@@ -101,6 +101,16 @@ class QuestionService
             QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
         );
     }
+    /**
+     * Create paginated list.
+     *
+     *
+     * @param int                                                   $page Page number
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
+     * @param array                                               $filters Filters array
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
+     */
     public function createPaginatedList_not_author(int $page, array $filters = []): PaginationInterface
     {
         $filters = $this->prepareFilters($filters);
@@ -161,8 +171,6 @@ class QuestionService
                 $resultFilters['tag'] = $tag;
             }
         }
-
-
         return $resultFilters;
     }
     /**
