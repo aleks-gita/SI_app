@@ -1,4 +1,7 @@
 <?php
+/**
+ * Registration controller.
+ */
 namespace App\Controller;
 
 use App\Entity\User;
@@ -8,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
 /**
  * Class RegistrationController.
  */
@@ -17,10 +19,13 @@ class RegistrationController extends AbstractController
     /**
      * Registration.
      *
-     * @param Request $request HTTP request
+     * @param Request                      $request         HTTP request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
      * @throws \Symfony\Component\Form\Exception\LogicException
+     *
      * @Route("/register", methods={"GET", "POST"}, name="user_registration")
      * )
      */
@@ -31,7 +36,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $password = $passwordEncoder->encodePassword(
                 $user,
                 $user->getPassword()

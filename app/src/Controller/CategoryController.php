@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-
 /**
  * Class CategoryController.
  *
@@ -28,14 +27,14 @@ class CategoryController extends AbstractController
     /**
      * Category service.
      *
-     * @var \App\Service\CategoryService
+     * @var CategoryService
      */
     private $categoryService;
 
     /**
      * CategoryController constructor.
      *
-     * @param \App\Service\CategoryService $categoryService Category service
+     * @param CategoryService $categoryService Category service
      */
     public function __construct(CategoryService $categoryService)
     {
@@ -45,18 +44,15 @@ class CategoryController extends AbstractController
     /**
      * Index action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
-     * @param \Knp\Component\Pager\PaginatorInterface   $paginator          Paginator
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
      * @Route(
      *     "/",
      *     methods={"GET"},
      *     name="category_index",
      * )
-     *
      */
     public function index(Request $request): Response
     {
@@ -73,9 +69,9 @@ class CategoryController extends AbstractController
     /**
      * Show action.
      *
-     * @param \App\Entity\Category $category Category entity
+     * @param Category $category Category entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}",
@@ -97,25 +93,20 @@ class CategoryController extends AbstractController
             ['category' => $category]
         );
     }
-     /**
+
+    /**
      * Create action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Service\CategoryService      $categoryService Category Service
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/create",
      *     methods={"GET", "POST"},
      *     name="category_create",
      * )
-      * @IsGranted("ROLE_ADMIN")
-     *
-
+     * @IsGranted("ROLE_ADMIN")
      */
     public function create(Request $request): Response
     {
@@ -137,17 +128,14 @@ class CategoryController extends AbstractController
             ['form' => $form->createView()]
         );
     }
+
     /**
      * Edit action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Category                      $category           Category entity
-     * @param \App\Repository\CategoryService       $categoryService Service repository
+     * @param Request  $request  HTTP request
+     * @param Category $category Category entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}/edit",
@@ -161,7 +149,6 @@ class CategoryController extends AbstractController
      *     subject="category",
      * )
      */
-
     public function edit(Request $request, Category $category): Response
     {
         $form = $this->createForm(CategoryType::class, $category, ['method' => 'PUT']);
@@ -183,17 +170,15 @@ class CategoryController extends AbstractController
             ]
         );
     }
+
     /**
      * Delete action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Category                      $category           Category entity
-     * @param \App\Repository\CategoryRepository        $categoryRepository Category repository
+     * @param Request  $request  HTTP request
+     * @param Category $category Category entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @Route(
      *     "/{id}/delete",
@@ -208,12 +193,10 @@ class CategoryController extends AbstractController
      *     subject="category",
      * )
      *
-     *
      */
-
     public function delete(Request $request, Category $category): Response
     {
-        if($category->getQuestions()->count()){
+        if ($category->getQuestions()->count()) {
             $this->addFlash('warning', 'message_category_contains_questions');
 
             return $this->redirectToRoute('category_index');

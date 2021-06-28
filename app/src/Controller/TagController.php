@@ -6,7 +6,9 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
-use App\Service\TagService;;
+use App\Repository\CategoryRepository;
+use App\Repository\TagRepository;
+use App\Service\TagService;
 use App\Form\TagType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
 
 /**
  * Class TagController.
@@ -45,18 +46,15 @@ class TagController extends AbstractController
     /**
      * Index action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\TagRepository        $tagRepository Tag repository
-     * @param \Knp\Component\Pager\PaginatorInterface   $paginator          Paginator
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
      * @Route(
      *     "/",
      *     methods={"GET"},
      *     name="tag_index",
      * )
-     *
      *
      */
     public function index(Request $request): Response
@@ -73,9 +71,9 @@ class TagController extends AbstractController
     /**
      * Show action.
      *
-     * @param \App\Entity\Tag $tag Category entity
+     * @param Tag $tag Category entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}",
@@ -97,16 +95,13 @@ class TagController extends AbstractController
             ['tag' => $tag]
         );
     }
+
     /**
      * Create action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\CategoryRepository        $tagRepository Tag repository
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/create",
@@ -135,17 +130,16 @@ class TagController extends AbstractController
             ['form' => $form->createView()]
         );
     }
+
     /**
      * Edit action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Tag                     $tag           Tag entity
-     * @param \App\Repository\TagService       $tagService Tag Service
+     * @param Request $request HTTP request
+     * @param Tag     $tag     Tag entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      *
      * @Route(
      *     "/{id}/edit",
@@ -158,16 +152,14 @@ class TagController extends AbstractController
      *     "EDIT",
      *     subject="tag",
      * )
-     *
      */
-
     public function edit(Request $request, Tag $tag): Response
     {
         $form = $this->createForm(TagType::class, $tag, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-           $this-> tagService->save($tag);
+            $this-> tagService->save($tag);
 
             $this->addFlash('success', 'message_updated_successfully');
 
@@ -182,17 +174,14 @@ class TagController extends AbstractController
             ]
         );
     }
+
     /**
      * Delete action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Tag                     $tag           tag entity
-     * @param \App\Repository\TagService        $tagService tag Service
+     * @param Request $request HTTP request
+     * @param Tag     $tag     tag entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}/delete",
@@ -200,13 +189,11 @@ class TagController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="tag_delete",
      * )
-     *@IsGranted("ROLE_USER",
+     * @IsGranted("ROLE_USER",
      *     "DELETE",
      *     subject="tag",
      * )
-     *
      */
-
     public function delete(Request $request, Tag $tag): Response
     {
         /*if($category->getCategory()->count()){

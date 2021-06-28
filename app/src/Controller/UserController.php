@@ -28,9 +28,9 @@ class UserController extends AbstractController
     /**
      * Index action.
      *
-     * @param Request $request HTTP request
-     * @param UserRepository $userRepository User repository
-     * @param PaginatorInterface $paginator Paginator
+     * @param Request            $request        HTTP request
+     * @param UserRepository     $userRepository User repository
+     * @param PaginatorInterface $paginator      Paginator
      *
      * @return Response HTTP response
      *
@@ -81,13 +81,11 @@ class UserController extends AbstractController
     /**
      * Edit action.
      *
-     * @param Request $request HTTP request
-     * @param UserRepository $userdataRepository User repository
+     * @param Request        $request        HTTP request
+     * @param User           $user
+     * @param UserRepository $userRepository
      *
      * @return Response HTTP response
-     *
-     * @throws ORMException
-     * @throws OptimisticLockException
      *
      * @Route(
      *     "/{id}/edit",
@@ -98,8 +96,8 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
-        $User = $this->getUser();
-        if ([User::ROLE_ADMIN]) {
+        $log = $this->getUser();
+        if ($this->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(UserdataType::class, $user, ['method' => 'PUT']);
             $form->handleRequest($request);
 
@@ -119,26 +117,25 @@ class UserController extends AbstractController
                     'user' => $user,
                 ]
             );
-        }
-        else {
+        } else {
             {
-                $form = $this->createForm(UserdataType::class, $User, ['method' => 'PUT']);
+                $form = $this->createForm(UserdataType::class, $log, ['method' => 'PUT']);
                 $form->handleRequest($request);
 
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $newPassword = $form->get('newPassword')->getData();
-                    $userRepository->save($User, $newPassword);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $newPassword = $form->get('newPassword')->getData();
+                $userRepository->save($log, $newPassword);
 
-                    $this->addFlash('success', 'message_updated_successfully');
+                $this->addFlash('success', 'message_updated_successfully');
 
-                    return $this->redirectToRoute('question_index');
-                }
+                return $this->redirectToRoute('question_index');
+            }
 
                 return $this->render(
                     'user/edit.html.twig',
                     [
                         'form' => $form->createView(),
-                        'user' => $User,
+                        'user' => $log,
                     ]
                 );
 
@@ -146,5 +143,4 @@ class UserController extends AbstractController
             }
         }
     }
-
 }

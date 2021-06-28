@@ -1,9 +1,7 @@
 <?php
-/** ... ... */
+/** ...Answer Controller... */
 
 namespace App\Controller;
-
-
 
 use App\Entity\Answer;
 use App\Entity\Question;
@@ -21,9 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
-
-
 
 /**
  *Class AnswerController
@@ -54,6 +49,7 @@ class AnswerController extends AbstractController
      *
      *
      * @param Request $request
+     *
      * @return Response HTTP response
      *
      * @Route(
@@ -62,11 +58,39 @@ class AnswerController extends AbstractController
      *     name="answer_index",
      * )
      */
+    public function index(Request $request): Response
+    {
+
+        $filters = [];
+        $filters['question_id'] = $request->query->getInt('filters_question_id');
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $pagination = $this->answerService->createPaginatedListNotAuthor(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+        } elseif ($this->isGranted('ROLE_USER')) {
+            $pagination = $this->answerService->createPaginatedListAuthor(
+                $request->query->getInt('page', 1),
+                $this->getUser(),
+                $filters
+            );
+        } else {
+            $pagination = $this->answerService->createPaginatedListNotAuthor(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+        }
+
+        return $this->render(
+            'answer/index.html.twig',
+            ['pagination' => $pagination]
+        );
+    }
 
     /*public function index(Request $request, AnswerRepository $answerRepository, PaginatorInterface $paginator): Response
     {
         if ($this->isGranted('ROLE_ADMIN')){
-
             $pagination = $paginator->paginate(
                 $answerRepository->queryAll(),
                 $request->query->getInt('page', 1),
@@ -81,78 +105,22 @@ class AnswerController extends AbstractController
             );
         }
         else{
-
             $pagination = $this->paginator->paginate(
                 $this->answerRepository->queryAll(),
                 $request->query->getInt('page', 1),
                 AnswerRepository::PAGINATOR_ITEMS_PER_PAGE
             );
         }
-
         return $this->render(
             'answer/index.html.twig',
             ['pagination' => $pagination]
         );
     }*/
-    public function index(Request $request): Response
-    {
-
-        $filters = [];
-        $filters['question_id'] = $request->query->getInt('filters_question_id');
-
-        if ($this->isGranted('ROLE_ADMIN')) {
-
-            $pagination = $this->answerService->createPaginatedList_not_author(
-                $request->query->getInt('page', 1),
-                $filters
-            );
-
-        } elseif ($this->isGranted('ROLE_USER')) {
-
-            $pagination = $this->answerService->createPaginatedList_author(
-                $request->query->getInt('page', 1),
-                $this->getUser(),
-                $filters
-            );
-        } else {
-
-            $pagination = $this->answerService->createPaginatedList_not_author(
-                $request->query->getInt('page', 1),
-                $filters
-            );
-
-        }
-        return $this->render(
-            'answer/index.html.twig',
-            ['pagination' => $pagination]
-        );
-    }
-
-    public function index_author(Request $request): Response
-    {
-
-        $filters = [];
-        $filters['question_id'] = $request->query->getInt('filters_question_id');
-
-        if ($this->isGranted('ROLE_USER')) {
-
-            $pagination = $this->answerService->createPaginatedList_author(
-                $request->query->getInt('page', 1),
-                $this->getUser(),
-                $filters
-            );
-
-            return $this->render(
-                'answer/index.html.twig',
-                ['pagination' => $pagination]
-            );
-        }
-    }
 
     /**
      * Show action.
      *
-     * @param \App\Entity\Answer $answer Answer entity
+     * @param Answer $answer Answer entity
      *
      * @return Response HTTP response
      *
@@ -175,7 +143,7 @@ class AnswerController extends AbstractController
         }
 
         if ($this->isGranted('ROLE_USER')) {
-            if ($answer->getAuthor() !== $this->getUser()) {
+            if ($this->denyAccessUnlessGranted('VIEW', $answer)) {//{$answer->getAuthor() !== $this->getUser()) {
                 $this->addFlash('warning', 'message.item_not_found');
 
                 return $this->redirectToRoute('answer_index');
@@ -185,9 +153,8 @@ class AnswerController extends AbstractController
                 'answer/show.html.twig',
                 ['answer' => $answer]
             );
-
         }
-        if ($this->isGranted('ROLE_USER') == false) {
+        if ($this->isGranted('ROLE_USER') === false) {
             return $this->render(
                 'answer/show.html.twig',
                 ['answer' => $answer]
@@ -199,13 +166,9 @@ class AnswerController extends AbstractController
     /**
      * Answer action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
-     * @param \App\Service\AnswerService $answerService Answer Service
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/create",
@@ -219,7 +182,7 @@ class AnswerController extends AbstractController
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_USER') == false) {
+        if ($this->isGranted('ROLE_USER') === false) {
             if ($form->isSubmitted() && $form->isValid()) {
                 // $answer->setAuthorName($this-> getAuthorName);
                 $answer->setDate(new \DateTime());
@@ -227,9 +190,7 @@ class AnswerController extends AbstractController
                 $this->addFlash('success', 'message_created_successfully');
 
                 return $this->redirectToRoute('question_index');
-
             }
-
         }
 
         if ($this->isGranted('ROLE_USER')) {
@@ -243,7 +204,7 @@ class AnswerController extends AbstractController
             }
         }
 
-        if ($this->isGranted('ROLE_USER') == false) {
+        if ($this->isGranted('ROLE_USER') === false) {
             if ($form->isSubmitted() && $form->isValid()) {
                 //$answer->setAuthor($this->getAuthor);
                 $answer->setQuestion($this->getAuthor);
@@ -252,10 +213,9 @@ class AnswerController extends AbstractController
                 $this->addFlash('success', 'message_created_successfully');
 
                 return $this->redirectToRoute('question_index');
-
             }
-
         }
+
         return $this->render(
             'answer/create.html.twig',
             ['form' => $form->createView()]
@@ -265,13 +225,9 @@ class AnswerController extends AbstractController
     /**
      * Answer action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
-     * @param \App\Service\AnswerService $answerService Answer Service
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/add",
@@ -285,7 +241,7 @@ class AnswerController extends AbstractController
         $form = $this->createForm(AnswerAnonimType::class, $answer);
         $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_USER') == false) {
+        if ($this->isGranted('ROLE_USER') === false) {
             if ($form->isSubmitted() && $form->isValid()) {
                 // $answer->setAuthorName($this-> getAuthorName);
                 $answer->setDate(new \DateTime());
@@ -293,26 +249,22 @@ class AnswerController extends AbstractController
                 $this->addFlash('success', 'message_created_successfully');
 
                 return $this->redirectToRoute('question_index');
-
             }
-
         }
+
         return $this->render(
             'answer/add.html.twig',
             ['form' => $form->createView()]
         );
     }
+
     /**
      * Edit action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Entity\Answer                          $answer      answer entity
-     * @param \App\Repository\AnswerRepository            $answerRepository answer repository
+     * @param Request $request HTTP request
+     * @param Answer  $answer  answer entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}/edit",
@@ -336,11 +288,12 @@ class AnswerController extends AbstractController
 
             return $this->redirectToRoute('answer_index');
         }
-        if ($answer->getAuthor() !== $this->getUser()) {
+        if ($this->denyAccessUnlessGranted('EDIT', $answer)) {//$answer->getAuthor() !== $this->getUser()) {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('answer_index');
         }
+
         return $this->render(
             'answer/edit.html.twig',
             [
@@ -354,14 +307,10 @@ class AnswerController extends AbstractController
     /**
      * Indication action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Entity\Answer                          $answer      answer entity
-     * @param \App\Repository\AnswerRepository            $answerRepository answer repository
+     * @param Request $request HTTP request
+     * @param Answer  $answer  answer entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}/indication",
@@ -393,17 +342,12 @@ class AnswerController extends AbstractController
             ]
         );
     }
-
-
     /**
      * Delete action.
-    @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Entity\Answer                          $answer      answer entity
-     * @param \App\Repository\AnswerRepository            $answerRepository answer repository
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @param Request $request HTTP request
+     * @param Answer  $answer  answer entity
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}/delete",
@@ -431,7 +375,7 @@ class AnswerController extends AbstractController
 
             return $this->redirectToRoute('question_index');
         }
-        if ($this->isGranted('ROLE_ADMIN')){
+        if ($this->isGranted('ROLE_ADMIN')) {
             return $this->render(
                 'answer/delete.html.twig',
                 [
@@ -441,7 +385,7 @@ class AnswerController extends AbstractController
             );
         }
         if ($this->isGranted('ROLE_USER')) {
-            if ($answer->getAuthor() !== $this->getUser()) {
+            if ($this->denyAccessUnlessGranted('DELETE', $answer)) {//$answer->getAuthor() !== $this->getUser()) {
                 $this->addFlash('warning', 'message.item_not_found');
 
                 return $this->redirectToRoute('question_index');
@@ -464,6 +408,4 @@ class AnswerController extends AbstractController
             ]
         );
     }
-
-
 }

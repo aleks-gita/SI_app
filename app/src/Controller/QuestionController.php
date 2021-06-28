@@ -4,7 +4,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Question;
 use App\Form\QuestionType;
 use App\Service\QuestionService;
@@ -36,9 +35,9 @@ class QuestionController extends AbstractController
      *
      *  QuestionController constructor.
      *
-     * @param \App\Service\ QuestionService $questionService  Question service
+     * @param \App\Service\ QuestionService $questionService Question service
      */
-    public function __construct( QuestionService $questionService)
+    public function __construct(QuestionService $questionService)
     {
         $this->questionService = $questionService;
     }
@@ -48,6 +47,7 @@ class QuestionController extends AbstractController
      *
      *
      * @param Request $request
+     *
      * @return Response HTTP response
      *
      * @Route(
@@ -56,6 +56,40 @@ class QuestionController extends AbstractController
      *     name="question_index",
      * )
      */
+    public function index(Request $request): Response
+    {
+
+        $filters = [];
+        $filters['category_id'] = $request->query->getInt('filters_category_id');
+        $filters['tag_id'] = $request->query->getInt('filters_tag_id');
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            //$page = $request->query->getInt('page', 1);
+            $pagination = $this->questionService->createPaginatedListNotAuthor(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+        } elseif ($this->isGranted('ROLE_USER')) {
+            $pagination = $this->questionService->createPaginatedListAuthor(
+                $request->query->getInt('page', 1),
+                $this->getUser(),
+                $filters
+            );
+        } else {
+            $pagination = $this->questionService->createPaginatedListNotAuthor(
+                $request->query->getInt('page', 1),
+                $filters
+            );
+        }
+
+        //$request->query->getInt('page', 1);
+        //pagination = $this->questionService->createPaginatedList($page);
+
+        return $this->render(
+            'question/index.html.twig',
+            ['pagination' => $pagination]
+        );
+    }
 
     /*public function index(Request $request): Response
     {
@@ -89,58 +123,13 @@ class QuestionController extends AbstractController
         );
     */
 
-    public function index(Request $request): Response
-    {
-
-        $filters = [];
-        $filters['category_id'] = $request->query->getInt('filters_category_id');
-        $filters['tag_id'] = $request->query->getInt('filters_tag_id');
-
-        if ($this->isGranted('ROLE_ADMIN') ) {
-
-
-            //$page = $request->query->getInt('page', 1);
-            $pagination = $this->questionService->createPaginatedList_not_author(
-                $request->query->getInt('page', 1),
-                $filters
-            );
-
-        } elseif ($this->isGranted('ROLE_USER')) {
-
-            $pagination = $this->questionService->createPaginatedList_author(
-                $request->query->getInt('page', 1),
-                $this->getUser(),
-                $filters
-            );
-        } else {
-
-            $pagination = $this->questionService->createPaginatedList_not_author(
-                $request->query->getInt('page', 1),
-                $filters
-            );
-
-        }
-
-        //$request->query->getInt('page', 1);
-        //pagination = $this->questionService->createPaginatedList($page);
-
-        return $this->render(
-            'question/index.html.twig',
-            ['pagination' => $pagination]
-        );
-
-    }
 
     /**
      * Create action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Repository\QuestionRepository            $questionRepository Question repository
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/create",
@@ -172,14 +161,10 @@ class QuestionController extends AbstractController
     /**
      * Edit action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Entity\Question                          $question         Question entity
-     * @param \App\Repository\QuestionRepository            $taskRepository Task repository
+     * @param Request  $request  HTTP request
+     * @param Question $question Question entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}/edit",
@@ -204,7 +189,7 @@ class QuestionController extends AbstractController
             return $this->redirectToRoute('question_index');
         }
 
-        if ($question->getAuthor() !== $this->getUser()) {
+        if ($this->denyAccessUnlessGranted('EDIT', $question)) {//$question->getAuthor() !== $this->getUser()) {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('question_index');
@@ -222,14 +207,11 @@ class QuestionController extends AbstractController
     /**
      * Delete action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Entity\Question                         $question          question entity
-     * @param \App\Repository\QuestionRepository            $questionRepository question repository
+     * @param Request  $request  HTTP request
+     * @param Question $question question entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @Route(
      *     "/{id}/delete",
@@ -248,48 +230,45 @@ class QuestionController extends AbstractController
             $form = $this->createForm(FormType::class, $question, ['method' => 'DELETE']);
             $form->handleRequest($request);
 
-            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-                $form->submit($request->request->get($form->getName()));
-            }
+        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+            $form->submit($request->request->get($form->getName()));
+        }
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->questionService->delete($question);
-                $this->addFlash('success', 'message_deleted_successfully');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->questionService->delete($question);
+            $this->addFlash('success', 'message_deleted_successfully');
+
+            return $this->redirectToRoute('question_index');
+        }
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->render(
+                'question/delete.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'question' => $question,
+                ]
+            );
+        }
+        if ($this->isGranted('ROLE_USER')) {
+            if ($this->denyAccessUnlessGranted('DELETE', $question)) {//) {
+                $this->addFlash('warning', 'message.item_not_found');
 
                 return $this->redirectToRoute('question_index');
             }
-            if ($this->isGranted('ROLE_ADMIN')){
-                return $this->render(
-                    'question/delete.html.twig',
-                    [
-                        'form' => $form->createView(),
-                        'question' => $question,
-                    ]
-                );
-            }
-            if ($this->isGranted('ROLE_USER')) {
-                if ($question->getAuthor() !== $this->getUser()) {
-                    $this->addFlash('warning', 'message.item_not_found');
 
-                    return $this->redirectToRoute('question_index');
-                }
-
-                return $this->render(
-                    'question/delete.html.twig',
-                    [
-                        'form' => $form->createView(),
-                        'question' => $question,
-                    ]
-                );
-            }
+            return $this->render(
+                'question/delete.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'question' => $question,
+                ]
+            );
         }
-
-
-
+    }
     /**
      * Show action.
      *
-     * @param \App\Entity\Question $question Question entity
+     * @param Question $question Question entity
      *
      * @return Response HTTP response
      *
@@ -303,29 +282,29 @@ class QuestionController extends AbstractController
      */
     public function show(Question $question): Response
     {
-        if ($this->isGranted('ROLE_ADMIN')){
+        if ($this->isGranted('ROLE_ADMIN')) {
             return $this->render(
                 'question/show.html.twig',
                 ['question' => $question]
             );
         }
         if ($this->isGranted('ROLE_USER')) {
-            if ($question->getAuthor() !== $this->getUser()) {
+            if ($this->denyAccessUnlessGranted('VIEW', $question)) {//$question->getAuthor() !== $this->getUser()) {
                 $this->addFlash('warning', 'message.item_not_found');
 
                 return $this->redirectToRoute('question_index');
             }
+
             return $this->render(
                 'question/show.html.twig',
                 ['question' => $question]
             );
         }
-        if ($this->isGranted('ROLE_USER') == false){
+        if ($this->isGranted('ROLE_USER') === false) {
             return $this->render(
                 'question/show.html.twig',
                 ['question' => $question]
             );
         }
     }
-
 }
