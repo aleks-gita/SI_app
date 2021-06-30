@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
  *  @ORM\Table(name="tags")
+ *
  * @UniqueEntity(fields={"title"})
  */
 class Tag
@@ -42,6 +43,7 @@ class Tag
 
     /**
      * @ORM\Column(type="datetime")
+     *
      * @Gedmo\Timestampable(on="create")
      */
     private $date;
@@ -80,6 +82,7 @@ class Tag
      * Setter for Title.
      *
      * @param string $title
+     *
      * @return void
      */
     public function setTitle(string $title): void
@@ -100,6 +103,7 @@ class Tag
      * Setter for Data.
      *
      * @param DateTimeInterface $date
+     *
      * @return void
      */
     public function setDate(DateTimeInterface $date): void
@@ -120,6 +124,7 @@ class Tag
      * Add Question
      *
      * @param Question $question
+     *
      * @return void
      */
     public function addQuestion(Question $question): void
@@ -133,6 +138,7 @@ class Tag
      * Remove Question.
      *
      * @param Question $question
+     *
      * @return void
      */
     public function removeQuestion(Question $question): void
@@ -140,6 +146,5 @@ class Tag
         if ($this->questions->removeElement($question)) {
             $question->removeTag($this);
         }
-
     }
 }

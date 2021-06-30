@@ -44,6 +44,7 @@ class AnswerRepository extends ServiceEntityRepository
      * Query all records.
      *
      * @param array $filters
+     *
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
     public function queryAll(array $filters = []): QueryBuilder
@@ -51,27 +52,13 @@ class AnswerRepository extends ServiceEntityRepository
             $queryBuilder = $this->getOrCreateQueryBuilder()
                 ->select(
                     'partial answer.{id, date, content, title, indication, nick}',
-                            'partial questions.{id, date, content, title}',
-
+                    'partial questions.{id, date, content, title}',
                 )
                      ->join('answer.questions', 'questions')
-                    -> orderBy('answer.indication',  'DESC');
+                    -> orderBy('answer.indication', 'DESC');
         $queryBuilder = $this->applyFiltersToList($queryBuilder, $filters);
 
         return $queryBuilder;
-    }
-
-    /**
-     * Get or create new query builder.
-     *
-     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
-     *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
-     */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
-    {
-        return $queryBuilder ?? $this->createQueryBuilder('answer');
-
     }
     /**
      * Save record.
@@ -103,8 +90,9 @@ class AnswerRepository extends ServiceEntityRepository
     /**
      * Query tasks by author.
      *
-     * @param \App\Entity\User $user User entity
-     * @param array $filters
+     * @param \App\Entity\User $user    User entity
+     * @param array            $filters
+     *
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
     public function queryByAuthor(User $user, array $filters = []): QueryBuilder
@@ -115,6 +103,17 @@ class AnswerRepository extends ServiceEntityRepository
             ->setParameter('author', $user);
 
         return $queryBuilder;
+    }
+    /**
+     * Get or create new query builder.
+     *
+     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    {
+        return $queryBuilder ?? $this->createQueryBuilder('answer');
     }
     /**
      * Apply filters to paginated list.

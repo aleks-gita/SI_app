@@ -69,7 +69,6 @@ class QuestionRepository extends ServiceEntityRepository
     {
             $this->_em->remove($question);
             $this->_em->flush();
-
     }
     /**
      * Query all records.
@@ -85,7 +84,6 @@ class QuestionRepository extends ServiceEntityRepository
                 'partial question.{id, date, content, title}',
                 'partial category.{id, name}',
                 'partial tags.{id, title}',
-
             )
 
             ->join('question.category', 'category')
@@ -95,24 +93,14 @@ class QuestionRepository extends ServiceEntityRepository
 
         return $queryBuilder;
     }
-    /**
-     * Get or create new query builder.
-     *
-     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
-     *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
-     */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null ): QueryBuilder
-    {
-        return $queryBuilder ?? $this->createQueryBuilder('question');
-    }
 
 
     /**
      * Query questions by author.
      *
-     * @param \App\Entity\User $user User entity
-     * @param array $filters
+     * @param \App\Entity\User $user    User entity
+     * @param array            $filters
+     *
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
     public function queryByAuthor(User $user, array $filters = []): QueryBuilder
@@ -123,6 +111,17 @@ class QuestionRepository extends ServiceEntityRepository
             ->setParameter('author', $user);
 
         return $queryBuilder;
+    }
+    /**
+     * Get or create new query builder.
+     *
+     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    {
+        return $queryBuilder ?? $this->createQueryBuilder('question');
     }
     /**
      * Apply filters to paginated list.

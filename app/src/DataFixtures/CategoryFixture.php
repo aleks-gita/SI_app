@@ -25,6 +25,7 @@ class CategoryFixture extends AbstractBaseFixtures implements DependentFixtureIn
             $category = new Category();
             $category->setName($this->faker->word);
             $category->setAuthor($this->getRandomReference('users'));
+
             return $category;
         });
 

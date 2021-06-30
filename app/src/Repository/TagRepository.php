@@ -47,18 +47,7 @@ class TagRepository extends ServiceEntityRepository
         return $this->getOrCreateQueryBuilder()
            -> orderBy('tag.date', 'DESC');
     }
-    /**
-     * Get or create new query builder.
-     *
-     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
-     *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
-     */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
-    {
-        return $queryBuilder ?? $this->createQueryBuilder('tag');
 
-    }
     /**
      * Save record.
      *
@@ -84,6 +73,17 @@ class TagRepository extends ServiceEntityRepository
     {
         $this->_em->remove($tag);
         $this->_em->flush();
+    }
+    /**
+     * Get or create new query builder.
+     *
+     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    {
+        return $queryBuilder ?? $this->createQueryBuilder('tag');
     }
 
 

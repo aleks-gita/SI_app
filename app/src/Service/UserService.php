@@ -10,7 +10,6 @@ use App\Repository\UserRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-
 /**
  * ClassUserService.
  */
@@ -34,8 +33,8 @@ class UserService
     /**
      * CategoryService constructor.
      *
-     * @param \App\Repository\UserRepository      $userRepository Question repository
-     * @param \Knp\Component\Pager\PaginatorInterface $paginator          Paginator
+     * @param \App\Repository\UserRepository          $userRepository Question repository
+     * @param \Knp\Component\Pager\PaginatorInterface $paginator      Paginator
      */
     public function __construct(UserRepository $userRepository, PaginatorInterface $paginator)
     {

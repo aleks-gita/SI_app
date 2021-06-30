@@ -45,7 +45,5 @@ class QuestionFixture extends AbstractBaseFixtures implements DependentFixtureIn
     public function getDependencies(): array
     {
         return [CategoryFixture::class, TagFixture::class, UserFixtures::class];
-
     }
-
 }

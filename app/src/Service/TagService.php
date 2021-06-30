@@ -9,6 +9,7 @@ use App\Entity\Tag;
 use App\Repository\TagRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+
 /**
  * Class TagService.
  */
@@ -31,8 +32,8 @@ class TagService
     /**
      * TagService constructor.
      *
-     * @param \App\Repository\TagRepository      $tagRepository Tag repository
-     * @param \Knp\Component\Pager\PaginatorInterface $paginator          Paginator
+     * @param \App\Repository\TagRepository           $tagRepository Tag repository
+     * @param \Knp\Component\Pager\PaginatorInterface $paginator     Paginator
      */
     public function __construct(TagRepository $tagRepository, PaginatorInterface $paginator)
     {

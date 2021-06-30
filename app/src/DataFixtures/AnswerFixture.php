@@ -13,7 +13,6 @@ use Doctrine\Persistence\ObjectManager;
  * Class AnswerFixtures.
  */
 class AnswerFixture extends AbstractBaseFixtures implements DependentFixtureInterface
-
 {
     /**
      * Load data.

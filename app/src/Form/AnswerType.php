@@ -18,7 +18,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-
 /**
  * Class AnswerType.
  */
@@ -78,8 +77,6 @@ class AnswerType extends AbstractType
                 'data' => 0,
             ]
         );
-
-
     }
 
     /**

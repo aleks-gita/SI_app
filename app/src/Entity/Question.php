@@ -40,7 +40,9 @@ class Question
      * Date
      *
      * @var \DateTimeInterface
+     *
      * @ORM\Column(type="date")
+     *
      * @Assert\Type(type="\DateTimeInterface")
 
      * @Gedmo\Timestampable(on="create")
@@ -51,7 +53,9 @@ class Question
      * Content
      *
      * @var string
+     *
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
      * @Assert\Length(
@@ -77,6 +81,7 @@ class Question
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
      * @Assert\Length(
@@ -136,6 +141,7 @@ class Question
      * Setter for Deadline.
      *
      * @param DateTimeInterface $date
+     *
      * @return void
      */
     public function setDate(\DateTimeInterface $date): void
@@ -155,6 +161,7 @@ class Question
      * Setter for Content.
      *
      * @param string $content
+     *
      * @return void
      */
     public function setContent(string $content): void
@@ -163,6 +170,8 @@ class Question
     }
     /**
      * Getter for Category.
+     *
+     * @return Category|null
      *
      */
     public function getCategory(): ?Category
@@ -174,6 +183,7 @@ class Question
      * Setter for Category.
      *
      * @param Category|null $category
+     *
      * @return void
      */
     public function setCategory(?Category $category): void
@@ -191,10 +201,10 @@ class Question
             $this->answers[] = $answer;
             $answer->setQuestion($this);
         }
-
     }
     /**
      * Remove Answer
+     *
      * @param Answer $answer
      */
     public function removeAnswer(Answer $answer): void
@@ -208,6 +218,8 @@ class Question
     }
     /**
      * Getter for Title.
+     *
+     * @return string|null
      */
     public function getTitle(): ?string
     {
@@ -217,13 +229,12 @@ class Question
      * Setter for Title.
      *
      * @param string $title
+     *
      * @return void
      */
     public function setTitle(string $title): void
     {
         $this->title = $title;
-
-
     }
 
     /**
@@ -239,6 +250,7 @@ class Question
      * Add Tag.
      *
      * @param Tag $tag
+     *
      * @return void
      */
     public function addTag(Tag $tag): void
@@ -246,7 +258,6 @@ class Question
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
         }
-
     }
     /**
      * Remove Tag.
@@ -274,7 +285,5 @@ class Question
     public function setAuthor(?User $author): void
     {
         $this->author = $author;
-
     }
-
 }

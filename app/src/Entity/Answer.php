@@ -32,6 +32,7 @@ class Answer
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
      * @Assert\Length(
@@ -54,6 +55,7 @@ class Answer
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
      * @Assert\Length(
@@ -95,12 +97,12 @@ class Answer
      * Setter for Deadline.
      *
      * @param DateTimeInterface $date
+     *
      * @return void
      */
     public function setDate(\DateTimeInterface $date): void
     {
         $this->date = $date;
-
     }
     /**
      * Getter for Content.
@@ -115,12 +117,12 @@ class Answer
      * Setter for Content.
      *
      * @param string $content
+     *
      * @return void
      */
     public function setContent(string $content): void
     {
         $this->content = $content;
-
     }
     /**
      * Getter for Content.
@@ -135,16 +137,18 @@ class Answer
      * Setter for Indication
      *
      * @param bool $indication
+     *
      * @return void
      */
     public function setIndication(bool $indication): void
     {
         $this->indication = $indication;
-
     }
+
     /**
      * Getter for Question.
      *
+     * @return Question|null
      */
     public function getQuestion(): ?Question
     {
@@ -154,15 +158,17 @@ class Answer
      * Setter for Category.
      *
      * @param Question|null $question
+     *
      * @return void
      */
     public function setQuestion(?Question $question): void
     {
         $this->questions = $question;
-
     }
     /**
      * Getter for Title.
+     *
+     * @return string|null
      */
     public function getTitle(): ?string
     {
@@ -172,12 +178,12 @@ class Answer
      * Setter for Title.
      *
      * @param string $title
+     *
      * @return void
      */
     public function setTitle(string $title): void
     {
         $this->title = $title;
-
     }
     /**
      * Getter for Author.
@@ -196,7 +202,6 @@ class Answer
     public function setAuthor(?User $author): void
     {
         $this->author = $author;
-
     }
     /**
      * Getter for Nick
@@ -215,7 +220,5 @@ class Answer
     public function setNick(string $nick): void
     {
         $this->nick = $nick;
-
     }
-
 }

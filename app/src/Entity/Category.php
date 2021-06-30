@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\Table(name="categories")
+ *
  *  @UniqueEntity(fields={"name"})
  */
 class Category
@@ -53,7 +54,6 @@ class Category
 
     /**
      *
-     * @var
      *
      * @ORM\OneToMany(
      *  targetEntity = Question::class,
@@ -130,11 +130,12 @@ class Category
     }/**
      * Add Question.
      * @param Question $question
+     *
      * @return void
      */
     public function addQuestion(Question $question): void
     {
-        if(!$this->questions->contains($this)) {
+        if (!$this->questions->contains($this)) {
             $this->questions[] = $question;
             $question->setCategory($this);
         }
@@ -143,13 +144,14 @@ class Category
      * Remove question.
      *
      * @param Question $question
+     *
      * @return void
      */
     public function removeQuestion(Question $question): void
     {
-        if($this->questions->contains($question)) {
+        if ($this->questions->contains($question)) {
             $this->questions->removeElement($question);
-            if($question->getCategory() == $this){
+            if ($question->getCategory() === $this) {
                 $question->setCategory(null);
             }
         }
@@ -171,8 +173,6 @@ class Category
     public function setCode(string $code): void
     {
         $this->code = $code;
-
-
     }
 
     /**
@@ -192,6 +192,5 @@ class Category
     public function setAuthor(?User $author): void
     {
         $this->author = $author;
-
     }
 }

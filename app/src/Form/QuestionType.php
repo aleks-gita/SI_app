@@ -90,7 +90,6 @@ class QuestionType extends AbstractType
         $builder->get('tags')->addModelTransformer(
             $this->tagsDataTransformer
         );
-
     }
 
     /**

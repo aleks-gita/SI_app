@@ -70,8 +70,8 @@ class QuestionService
      *
      * @param \App\Repository\QuestionRepository      $questionRepository Question repository
      * @param \Knp\Component\Pager\PaginatorInterface $paginator          Paginator
-     * @param \App\Service\CategoryService            $categoryService Category service
-     * @param \App\Service\TagService                 $tagService      Tag service
+     * @param \App\Service\CategoryService            $categoryService    Category service
+     * @param \App\Service\TagService                 $tagService         Tag service
      */
     public function __construct(QuestionRepository $questionRepository, PaginatorInterface $paginator, CategoryService $categoryService, TagService $tagService)
     {
@@ -79,19 +79,18 @@ class QuestionService
         $this->paginator = $paginator;
         $this->categoryService = $categoryService;
         $this->tagService = $tagService;
-
     }
     /**
      * Create paginated list.
      *
      *
-     * @param int                                                   $page Page number
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
-     * @param array                                               $filters Filters array
+     * @param int           $page    Page number
+     * @param UserInterface $user    User entity
+     * @param array         $filters Filters array
      *
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
+     * @return PaginationInterface Paginated list
      */
-    public function createPaginatedList_author(int $page, UserInterface $user, array $filters = []): PaginationInterface
+    public function createPaginatedListAuthor(int $page, UserInterface $user, array $filters = []): PaginationInterface
     {
         $filters = $this->prepareFilters($filters);
 
@@ -101,17 +100,17 @@ class QuestionService
             QuestionRepository::PAGINATOR_ITEMS_PER_PAGE
         );
     }
+
     /**
      * Create paginated list.
      *
      *
-     * @param int                                                   $page Page number
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
-     * @param array                                               $filters Filters array
+     * @param int   $page    Page number
+     * @param array $filters Filters array
      *
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
+     * @return PaginationInterface Paginated list
      */
-    public function createPaginatedList_not_author(int $page, array $filters = []): PaginationInterface
+    public function createPaginatedListNotAuthor(int $page, array $filters = []): PaginationInterface
     {
         $filters = $this->prepareFilters($filters);
 
@@ -124,7 +123,7 @@ class QuestionService
     /**
      * Save category.
      *
-     * @param \App\Entity\Question $question Question entity
+     * @param Question $question Question entity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -137,7 +136,7 @@ class QuestionService
     /**
      * Delete category.
      *
-     * @param \App\Entity\Question $question Question entity
+     * @param Question $question Question entity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -145,6 +144,17 @@ class QuestionService
     public function delete(Question $question): void
     {
         $this->questionRepository->delete($question);
+    }
+    /**
+     * Find Question by Id.
+     *
+     * @param int $id Question Id
+     *
+     * @return Question|null Question entity
+     */
+    public function findOneById(int $id): ?Question
+    {
+        return $this->questionRepository->findOneById($id);
     }
     /**
      * Prepare filters for the tasks list.
@@ -171,18 +181,7 @@ class QuestionService
                 $resultFilters['tag'] = $tag;
             }
         }
+
         return $resultFilters;
     }
-    /**
-     * Find Question by Id.
-     *
-     * @param int $id Question Id
-     *
-     * @return \App\Entity\Question|null Question entity
-     */
-    public function findOneById(int $id): ?Question
-    {
-        return $this->questionRepository->findOneById($id);
-    }
-
 }

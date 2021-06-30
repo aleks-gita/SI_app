@@ -41,7 +41,7 @@ class TagsDataTransformer implements DataTransformerInterface
      */
     public function transform($tags): string
     {
-        if (null == $tags) {
+        if (null === $tags) {
             return '';
         }
 
@@ -73,7 +73,7 @@ class TagsDataTransformer implements DataTransformerInterface
         foreach ($tagTitles as $tagTitle) {
             if ('' !== trim($tagTitle)) {
                 $tag = $this->tagService->findOneByTitle(strtolower($tagTitle));
-                if (null == $tag) {
+                if (null === $tag) {
                     $tag = new Tag();
                     $tag->setTitle($tagTitle);
                     $this->tagService->save($tag);

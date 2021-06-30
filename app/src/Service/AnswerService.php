@@ -21,14 +21,14 @@ class AnswerService
     /**
      * Answer repository.
      *
-     * @var \App\Repository\AnswerRepository
+     * @var AnswerRepository
      */
     private $answerRepository;
 
     /**
      * Paginator.
      *
-     * @var \Knp\Component\Pager\PaginatorInterface
+     * @var PaginatorInterface
      */
     private $paginator;
 
@@ -49,11 +49,11 @@ class AnswerService
     /**
      * AnswerService constructor.
      *
-     * @param \App\Repository\AnswerRepository      $answerRepository Answer repository
-     * @param \Knp\Component\Pager\PaginatorInterface $paginator          Paginator
-     * @param \App\Service\QuestionService            $questionService Question service
+     * @param AnswerRepository             $answerRepository Answer repository
+     * @param PaginatorInterface           $paginator        Paginator
+     * @param \App\Service\QuestionService $questionService  Question service
      */
-    public function __construct(AnswerRepository $answerRepository, PaginatorInterface $paginator,QuestionService $questionService)
+    public function __construct(AnswerRepository $answerRepository, PaginatorInterface $paginator, QuestionService $questionService)
     {
         $this->answerRepository = $answerRepository;
         $this->paginator = $paginator;
@@ -62,35 +62,34 @@ class AnswerService
     /**
      * Create paginated list.
      *
-     * @param int $page Page number
+     * @param int           $page    Page number
      *
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
-     * @param array                                               $filters Filters array
+     * @param UserInterface $user    User entity
+     * @param array         $filters Filters array
      *
+     *@return PaginationInterface Paginated list
      */
-    public function createPaginatedList_author(int $page, UserInterface $user, array $filters = []): PaginationInterface
+    public function createPaginatedListAuthor(int $page, UserInterface $user, array $filters = []): PaginationInterface
     {
             $filters = $this->prepareFilters($filters);
 
             return $this->paginator->paginate(
-            $this->answerRepository->queryByAuthor($user, $filters),
-            $page,
-            AnswerRepository::PAGINATOR_ITEMS_PER_PAGE
-        );
+                $this->answerRepository->queryByAuthor($user, $filters),
+                $page,
+                AnswerRepository::PAGINATOR_ITEMS_PER_PAGE
+            );
     }
+
     /**
      * Create paginated list.
      *
-     * @param int $page Page number
+     * @param int   $page    Page number
      *
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface Paginated list
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user    User entity
-     * @param array                                               $filters Filters array
+     * @param array $filters Filters array
      *
+     * @return PaginationInterface Paginated list
      */
-
-    public function createPaginatedList_not_author(int $page, array $filters = []): PaginationInterface
+    public function createPaginatedListNotAuthor(int $page, array $filters = []): PaginationInterface
     {
         $filters = $this->prepareFilters($filters);
 
